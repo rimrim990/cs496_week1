@@ -3,12 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/robin/AndroidStudioProjects/cs496_week1/app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="..\:/Users/robin/AndroidStudioProjects/cs496_week1/app/src/main/res/layout/fragment_first.xml" value="0.1" />
-        <entry key="..\:/Users/robin/AndroidStudioProjects/cs496_week1/app/src/main/res/layout/fragment_first2.xml" value="0.16818642350557245" />
-        <entry key="..\:/Users/robin/AndroidStudioProjects/cs496_week1/app/src/main/res/layout/fragment_main.xml" value="0.16818642350557245" />
-        <entry key="..\:/Users/robin/AndroidStudioProjects/cs496_week1/app/src/main/res/layout/fragment_second.xml" value="0.16818642350557245" />
-        <entry key="..\:/Users/robin/AndroidStudioProjects/cs496_week1/app/src/main/res/layout/fragment_third.xml" value="0.16818642350557245" />
+        <entry key="..\:/Users/Public/Documents/MyApplication2/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1015625" />
+        <entry key="..\:/Users/Public/Documents/MyApplication2/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1015625" />
+        <entry key="..\:/Users/Public/Documents/MyApplication2/app/src/main/res/layout/activity_image_detail.xml" value="0.14673913043478262" />
+        <entry key="..\:/Users/Public/Documents/MyApplication2/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/Public/Documents/MyApplication2/app/src/main/res/layout/fragment_main.xml" value="0.10144927536231885" />
+        <entry key="..\:/Users/Public/Documents/MyApplication2/app/src/main/res/layout/fragment_second.xml" value="0.22" />
+        <entry key="..\:/Users/Public/Documents/MyApplication2/app/src/main/res/layout/gridview_list_item.xml" value="0.6666666666666666" />
+        <entry key="..\:/Users/Public/Documents/MyApplication2/app/src/main/res/layout/recyclerview_list_item.xml" value="0.14673913043478262" />
       </map>
     </option>
   </component>

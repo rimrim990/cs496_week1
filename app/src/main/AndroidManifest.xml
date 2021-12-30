@@ -8,6 +8,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         android:theme="@style/Theme.MyApplication">
         <activity
             android:name=".MainActivity"
@@ -20,6 +22,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ImageDetailActivity"
+            android:parentActivityName=".MainActivity"
+            />
     </application>
+
+    <!-- permissions for reading external storage -->
+    <uses-permission android:name="adroid.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>
