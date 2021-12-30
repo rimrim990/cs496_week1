@@ -3,7 +3,7 @@
     package="com.example.myapplication">
 
     <!-- permissions for reading external storage -->
-    <uses-permission android:name="adroid.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"

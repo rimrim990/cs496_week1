@@ -1,13 +1,17 @@
 package com.example.myapplication;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -50,6 +54,8 @@ public class SecondFragment extends Fragment {
 
     private RecyclerviewAdapter adapter;
     private RecyclerView recyclerView;
+
+    private static final int PERMISSION_REQUEST_CODE = 200;
 
     //private ArrayList<BearItem> listData = new ArrayList<BearItem>();
     private ArrayList<String> imagePaths = new ArrayList<String>();
@@ -116,7 +122,9 @@ public class SecondFragment extends Fragment {
         adapter = new RecyclerviewAdapter(mContext, imagePaths);
         //adapter = new RecyclerviewAdapter(listData);
 
-        getImagePath();
+        // we are calling a method to request
+        // the permissions to read external storage.
+        requestPermissions();
 
         recyclerView.setAdapter(adapter);
 
@@ -162,6 +170,32 @@ public class SecondFragment extends Fragment {
         return view;
     }
 
+    private boolean checkPermission() {
+        // in this method we are checking if the permissions are granted or not and returning the result.
+        int result = ActivityCompat.checkSelfPermission(requireActivity(), READ_EXTERNAL_STORAGE);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermissions() {
+        if (checkPermission()) {
+            // if the permissions are already granted we are calling
+            // a method to get all images from our external storage.
+            Toast.makeText(mContext, "Permission granted..", Toast.LENGTH_SHORT).show();
+            getImagePath();
+        } else {
+            // if the permissions are not granted we are
+            // calling a method to request permissions.
+            Toast.makeText(mContext, "requestPermission..", Toast.LENGTH_SHORT).show();
+            requestPermission();
+        }
+    }
+
+    private void requestPermission() {
+        // on below line we are requesting the rea external storage permissions.
+        ActivityCompat.requestPermissions(requireActivity(), new String[]{READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        //requestPermissions(new String[]{READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+    }
+
     private void getImagePath() {
         // in this method we are adding all our image paths
         // in our arraylist which we have created.
@@ -199,10 +233,46 @@ public class SecondFragment extends Fragment {
                 // and adding that path in our array list.
                 imagePaths.add(cursor.getString(dataColumnIndex));
             }
+
             adapter.notifyDataSetChanged();
             // after adding the data to our
             // array list we are closing our cursor.
             cursor.close();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        // this method is called after permissions has benn granted.
+        switch(requestCode) {
+            // we are checking the permission code.
+            case PERMISSION_REQUEST_CODE:
+                // in this case we are checking if the permissions are accepted or not.
+                if (grantResults.length > 0) {
+                    boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (storageAccepted) {
+                        // if the permissions are accepted we are displaying a toast message
+                        // and calling a method to get image path.
+                        Toast.makeText(mContext, "Permission Granted..", Toast.LENGTH_SHORT).show();
+                        getImagePath();
+                    } else {
+                        // if permissions are denied we are closing the app and displaying the toast message
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(
+                                requireActivity(),
+                                READ_EXTERNAL_STORAGE
+                        )) {
+                            Log.d("TAG", "User declined, but i can still ask for more");
+                            ActivityCompat.requestPermissions(
+                                    requireActivity(),
+                                    new String[]{READ_EXTERNAL_STORAGE},
+                                    PERMISSION_REQUEST_CODE
+                            );
+                        } else {
+                            Log.d("TAG", "User declined and i can't ask");
+                            Toast.makeText(mContext, "Permission denied, Permissions are required to use the app..", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
         }
     }
 }

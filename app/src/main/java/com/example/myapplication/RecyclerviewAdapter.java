@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +52,12 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             // if the file exists then we are displaying that file in our image view using library.
             // TODO : loading image file
-            Glide.with(context).load(imgFile).into(((ViewHolderItem)holder).iv_icon);
+
+            Glide.with(context)
+                    .load(Uri.fromFile(imgFile))
+                    .placeholder(R.drawable.ic_launcher_foreground)
+                    .error(R.drawable.ic_launcher_background)
+                    .into(((ViewHolderItem)holder).iv_icon);
 
             // on below line we are adding clock listener to our item of recycler view.
             holder.itemView.setOnClickListener(new View.OnClickListener() {
