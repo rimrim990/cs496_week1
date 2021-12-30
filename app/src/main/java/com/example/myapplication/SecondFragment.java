@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +50,8 @@ public class SecondFragment extends Fragment {
 
     private RecyclerviewAdapter adapter;
     private RecyclerView recyclerView;
+
+    private ArrayList<BearItem> listData = new ArrayList<BearItem>();
 
     MainActivity activity;
 
@@ -107,11 +112,12 @@ public class SecondFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 3);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        adapter = new RecyclerviewAdapter();
+        adapter = new RecyclerviewAdapter(listData);
 
         recyclerView.setAdapter(adapter);
 
         // Adapter 안에 아이템의 정보 담기
+        /*
         adapter.addItem(new BearItem("1", "테스트", R.drawable.ic_launcher_foreground));
         adapter.addItem(new BearItem("2", "테스트", R.drawable.ic_launcher_foreground));
         adapter.addItem(new BearItem("3", "테스트", R.drawable.ic_launcher_foreground));
@@ -132,19 +138,65 @@ public class SecondFragment extends Fragment {
         adapter.addItem(new BearItem("18", "테스트", R.drawable.ic_launcher_foreground));
         adapter.addItem(new BearItem("19", "테스트", R.drawable.ic_launcher_foreground));
         adapter.addItem(new BearItem("20", "테스트", R.drawable.ic_launcher_foreground));
+        */
 
         adapter.setOnItemClickListener(new RecyclerviewAdapter.OnItemClickEventListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                String imageUrl = "./";
 
                 Intent intent = new Intent(getActivity(), ImageDetailActivity.class);
-                intent.putExtra("imageUrl", imageUrl);
+                intent.putExtra("imageId", listData.get(pos).getResId());
+                intent.putExtra("imageName", listData.get(pos).getName());
 
                 startActivity(intent);
             }
         });
 
         return view;
+    }
+
+    private void getImagePath() {
+        // in this method we are adding all our image paths
+        // in our arraylist which we have created.
+        // on below line we are checking if the device is having an sd card or not.
+        boolean isSDPresent = android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+
+        if (isSDPresent) {
+
+            // if the sd card is present we are creating a new list in
+            // which we are getting our images data with their ids
+            final String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID};
+
+            // on below line we are creating a new
+            // string to order our images by string
+            final String orderBy = MediaStore.Images.Media._ID;
+
+            // this method will stores all the images
+            // from the gallery in Cursor
+            Cursor cursor = mContext.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
+
+            // below line is to get total number of images
+            int count = cursor.getCount();
+
+            // on below line we are running a loop to add
+            // the image file path in our array list/
+            for (int i=0; i < count; i++) {
+
+                // on below line we are moving our cursor position
+                cursor.moveToPosition(i);
+
+                // on below line we are getting image file path
+                int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+
+                // after that we are getting the image file path
+                // and adding that path in our array list.
+                // imagePaths.add(cursor.getString(dataColumnIndex));
+            }
+
+            // RecyclerviewAdapter.notifyDataSetChanged();
+            // after adding the data to our
+            // array list we are closing our cursor.
+            cursor.close();
+        }
     }
 }

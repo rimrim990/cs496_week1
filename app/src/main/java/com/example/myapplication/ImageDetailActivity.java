@@ -19,17 +19,25 @@ import com.google.android.material.tabs.TabLayout;
 public class ImageDetailActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private String imageUrl;
+    private int imageId;
+    private String imageName;
+
+    private ImageView fullScreen;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_detail);
 
-        getSupportActionBar().setTitle("Activity2");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        imageId = getIntent().getExtras().getInt("imageId");
+        imageName = getIntent().getExtras().getString("imageName");
 
-        imageUrl = getIntent().getExtras().getString("imageUrl");
+        fullScreen = (ImageView) findViewById(R.id.full_iv_icon);
+        fullScreen.setImageResource(imageId);
+
+        getSupportActionBar().setTitle(imageName);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

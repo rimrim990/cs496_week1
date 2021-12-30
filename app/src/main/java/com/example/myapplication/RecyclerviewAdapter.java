@@ -17,10 +17,13 @@ import java.util.ArrayList;
 public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     // adapter 에 들어갈 list
-    private ArrayList<BearItem> listData = new ArrayList<BearItem>();
+    private ArrayList<BearItem> listData;
     private OnItemClickEventListener mItemClickListener;
 
     // constructor
+    public RecyclerviewAdapter(ArrayList<BearItem> list) {
+        this.listData = list;
+    }
 
     @NonNull
     @Override
