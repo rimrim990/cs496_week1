@@ -1,17 +1,25 @@
 package com.example.myapplication;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -25,12 +33,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.SimpleTimeZone;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,13 +70,17 @@ public class SecondFragment extends Fragment {
 
     private RecyclerviewAdapter adapter;
     private RecyclerView recyclerView;
+    private MainActivity activity;
+    private ImageView newImg;
 
-    private static final int PERMISSION_REQUEST_CODE = 200;
-
-    //private ArrayList<BearItem> listData = new ArrayList<BearItem>();
     private ArrayList<String> imagePaths = new ArrayList<String>();
 
-    MainActivity activity;
+    private static final int PERMISSION_REQUEST_CODE = 200;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int PICK_FROM_CAMERA = 2;
+
+    File tempFile = null;
+    String currentPhotoPath;
 
     public SecondFragment() {
         // Required empty public constructor
@@ -113,14 +133,23 @@ public class SecondFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_second, container, false);
+        newImg = view.findViewById(R.id.iv_icon);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        FloatingActionButton button = (FloatingActionButton)view.findViewById(R.id.cameraBtn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dispatchTakePhotoIntent();
+            }
+
+        });
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 3);
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(gridLayoutManager);
 
         adapter = new RecyclerviewAdapter(mContext, imagePaths);
-        //adapter = new RecyclerviewAdapter(listData);
 
         // we are calling a method to request
         // the permissions to read external storage.
@@ -128,56 +157,76 @@ public class SecondFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
-        // Adapter 안에 아이템의 정보 담기
-        /*
-        adapter.addItem(new BearItem("1", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("2", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("3", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("4", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("5", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("6", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("7", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("8", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("9", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("10", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("11", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("12", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("13", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("14", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("15", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("16", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("17", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("18", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("19", "테스트", R.drawable.ic_launcher_foreground));
-        adapter.addItem(new BearItem("20", "테스트", R.drawable.ic_launcher_foreground));
-        */
-
-        /*
-        adapter.setOnItemClickListener(new RecyclerviewAdapter.OnItemClickEventListener() {
-            @Override
-            public void onItemClick(View view, int pos) {
-
-                Intent intent = new Intent(getActivity(), ImageDetailActivity.class);
-                intent.putExtra("imagePath", imagePaths.get(pos));
-                //intent.putExtra("imageId", listData.get(pos).getResId());
-                // intent.putExtra("imageName", listData.get(pos).getName());
-
-                startActivity(intent);
-            }
-        });
-        */
-
         return view;
     }
 
-    private boolean checkPermission() {
-        // in this method we are checking if the permissions are granted or not and returning the result.
-        int result = ActivityCompat.checkSelfPermission(requireActivity(), READ_EXTERNAL_STORAGE);
-        return result == PackageManager.PERMISSION_GRANTED;
+    private void dispatchTakePhotoIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        // Ensure that there's a camera activity to handle the intent
+        if(takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
+
+            // Create the File where a photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch(IOException e) {
+                // ...error Occurred while creating the File
+                e.printStackTrace();
+            }
+
+            // Continue only if File was successfully created.
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(mContext, "com.example.myapplication", photoFile);
+                // Uri photoURI = Uri.fromFile(photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            imagePaths.add(String.valueOf(currentPhotoPath));
+            adapter.notifyDataSetChanged();
+
+            galleryAddPic();
+        }
+    }
+
+    private File createImageFile() throws IOException {
+
+        // Create an Image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+
+        File storageDir = new File(Environment.getExternalStorageDirectory() + "/DCIM/Camera");
+        File image = File.createTempFile(
+                imageFileName, /* prefix */
+                ".jpg",
+                storageDir
+        );
+
+        // Save a file : path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void galleryAddPic() {
+        File f = new File(currentPhotoPath);
+
+        MediaScannerConnection.scanFile(mContext, new String[]{f.toString()}, null, null);
+    }
+
+    private void updateImageView() {
+
     }
 
     private void requestPermissions() {
-        if (checkPermission()) {
+        if (ActivityCompat.checkSelfPermission(activity, WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             // if the permissions are already granted we are calling
             // a method to get all images from our external storage.
             Toast.makeText(mContext, "Permission granted..", Toast.LENGTH_SHORT).show();
@@ -185,15 +234,13 @@ public class SecondFragment extends Fragment {
         } else {
             // if the permissions are not granted we are
             // calling a method to request permissions.
-            Toast.makeText(mContext, "requestPermission..", Toast.LENGTH_SHORT).show();
             requestPermission();
         }
     }
 
     private void requestPermission() {
         // on below line we are requesting the rea external storage permissions.
-        ActivityCompat.requestPermissions(requireActivity(), new String[]{READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
-        //requestPermissions(new String[]{READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        ActivityCompat.requestPermissions(requireActivity(), new String[]{WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
     }
 
     private void getImagePath() {
@@ -257,22 +304,26 @@ public class SecondFragment extends Fragment {
                         getImagePath();
                     } else {
                         // if permissions are denied we are closing the app and displaying the toast message
+
                         if (ActivityCompat.shouldShowRequestPermissionRationale(
                                 requireActivity(),
-                                READ_EXTERNAL_STORAGE
+                                WRITE_EXTERNAL_STORAGE
                         )) {
                             Log.d("TAG", "User declined, but i can still ask for more");
                             ActivityCompat.requestPermissions(
                                     requireActivity(),
-                                    new String[]{READ_EXTERNAL_STORAGE},
+                                    new String[]{WRITE_EXTERNAL_STORAGE},
                                     PERMISSION_REQUEST_CODE
                             );
                         } else {
                             Log.d("TAG", "User declined and i can't ask");
                             Toast.makeText(mContext, "Permission denied, Permissions are required to use the app..", Toast.LENGTH_SHORT).show();
                         }
+
                     }
+
                 }
+
         }
     }
 }

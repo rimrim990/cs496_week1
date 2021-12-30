@@ -22,18 +22,5 @@ public class ViewHolderItem extends RecyclerView.ViewHolder{
         // initializing our view with their ids.
         iv_icon = (ImageView)itemView.findViewById(R.id.iv_icon);
 
-        /*
-        itemView.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final int position = getAdapterPosition();
-                itemClickListener.onItemClick(view, position);
-            }
-        }));
-        */
     }
-
-    //public void onBind(String imagePath) {
-    //    iv_icon.setImageResource(item.getResId());
-    //}
 }
