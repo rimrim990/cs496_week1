@@ -51,7 +51,8 @@ public class SecondFragment extends Fragment {
     private RecyclerviewAdapter adapter;
     private RecyclerView recyclerView;
 
-    private ArrayList<BearItem> listData = new ArrayList<BearItem>();
+    //private ArrayList<BearItem> listData = new ArrayList<BearItem>();
+    private ArrayList<String> imagePaths = new ArrayList<String>();
 
     MainActivity activity;
 
@@ -112,7 +113,10 @@ public class SecondFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 3);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        adapter = new RecyclerviewAdapter(listData);
+        adapter = new RecyclerviewAdapter(mContext, imagePaths);
+        //adapter = new RecyclerviewAdapter(listData);
+
+        getImagePath();
 
         recyclerView.setAdapter(adapter);
 
@@ -140,17 +144,20 @@ public class SecondFragment extends Fragment {
         adapter.addItem(new BearItem("20", "테스트", R.drawable.ic_launcher_foreground));
         */
 
+        /*
         adapter.setOnItemClickListener(new RecyclerviewAdapter.OnItemClickEventListener() {
             @Override
             public void onItemClick(View view, int pos) {
 
                 Intent intent = new Intent(getActivity(), ImageDetailActivity.class);
-                intent.putExtra("imageId", listData.get(pos).getResId());
-                intent.putExtra("imageName", listData.get(pos).getName());
+                intent.putExtra("imagePath", imagePaths.get(pos));
+                //intent.putExtra("imageId", listData.get(pos).getResId());
+                // intent.putExtra("imageName", listData.get(pos).getName());
 
                 startActivity(intent);
             }
         });
+        */
 
         return view;
     }
@@ -190,10 +197,9 @@ public class SecondFragment extends Fragment {
 
                 // after that we are getting the image file path
                 // and adding that path in our array list.
-                // imagePaths.add(cursor.getString(dataColumnIndex));
+                imagePaths.add(cursor.getString(dataColumnIndex));
             }
-
-            // RecyclerviewAdapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
             // after adding the data to our
             // array list we are closing our cursor.
             cursor.close();

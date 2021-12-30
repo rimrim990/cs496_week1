@@ -15,13 +15,14 @@ import java.util.ArrayList;
 
 public class ViewHolderItem extends RecyclerView.ViewHolder{
 
-    ImageView iv_icon;
+    public ImageView iv_icon;
 
-    public ViewHolderItem(@NonNull View itemView, final RecyclerviewAdapter.OnItemClickEventListener itemClickListener) {
+    public ViewHolderItem(@NonNull View itemView) {
         super(itemView);
-
+        // initializing our view with their ids.
         iv_icon = (ImageView)itemView.findViewById(R.id.iv_icon);
 
+        /*
         itemView.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -29,9 +30,10 @@ public class ViewHolderItem extends RecyclerView.ViewHolder{
                 itemClickListener.onItemClick(view, position);
             }
         }));
+        */
     }
 
-    public void onBind(BearItem item) {
-        iv_icon.setImageResource(item.getResId());
-    }
+    //public void onBind(String imagePath) {
+    //    iv_icon.setImageResource(item.getResId());
+    //}
 }
