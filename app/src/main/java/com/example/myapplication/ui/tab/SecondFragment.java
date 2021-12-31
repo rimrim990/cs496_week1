@@ -64,14 +64,14 @@ public class SecondFragment extends Fragment {
 
     private ArrayList<String> imagePaths = new ArrayList<String>();
 
-    private static boolean PERMISSION;
+    //private static boolean PERMISSION;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     String currentPhotoPath;
 
-    public SecondFragment(boolean PERMISSION) {
+    public SecondFragment() {
         // Required empty public constructor
-        this.PERMISSION = PERMISSION;
+        //this.PERMISSION = PERMISSION;
     }
 
     /**
@@ -84,7 +84,7 @@ public class SecondFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static SecondFragment newInstance(String param1, String param2) {
-        SecondFragment fragment = new SecondFragment(PERMISSION);
+        SecondFragment fragment = new SecondFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -136,15 +136,15 @@ public class SecondFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        adapter = new RecyclerviewAdapter(mContext, imagePaths);
+        adapter = new RecyclerviewAdapter(mContext, imagePaths, activity);
 
         // we are calling a method to request
         // the permissions to read external storage.
         // requestPermissions();
 
-        if (PERMISSION) {
-            getImagePath();
-        }
+        //if (PERMISSION) {
+        getImagePath();
+        //}
 
         recyclerView.setAdapter(adapter);
 

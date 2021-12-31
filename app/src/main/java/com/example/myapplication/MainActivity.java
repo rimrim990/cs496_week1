@@ -1,11 +1,14 @@
 package com.example.myapplication;
 
 import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.WRITE_CONTACTS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import android.content.pm.PackageManager;
+import android.media.Image;
 import android.os.Bundle;
 
+import com.example.myapplication.ui.tab.ImageDetailFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -31,11 +34,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding binding;
-
     TabLayout tabLayout;
     ViewPager2 pager2;
     FragmentAdapter adapter;
+    FragmentManager fm;
 
     private boolean TAB1_PERMISSION = true;
     private boolean TAB2_PERMISSION = true;
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabs);
         pager2 = findViewById(R.id.view_pager2);
 
-        FragmentManager fm = getSupportFragmentManager();
+        fm = getSupportFragmentManager();
         adapter = new FragmentAdapter(fm, getLifecycle(), TAB1_PERMISSION, TAB2_PERMISSION);
         pager2.setAdapter(adapter);
 
@@ -89,16 +91,20 @@ public class MainActivity extends AppCompatActivity {
     private void checkAndRequestPermissions() {
         int WExtstorePermission = ActivityCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE);
         int cameraPermission = ActivityCompat.checkSelfPermission(this, CAMERA);
+        int contactPermission = ActivityCompat.checkSelfPermission(this, WRITE_CONTACTS);
         List<String> listPermissionsNeeded = new ArrayList<>();
 
         if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
-            TAB2_PERMISSION = false;
-            listPermissionsNeeded.add(WRITE_EXTERNAL_STORAGE);
+            listPermissionsNeeded.add(CAMERA);
         }
         if (WExtstorePermission != PackageManager.PERMISSION_GRANTED) {
-            TAB2_PERMISSION = false;
             listPermissionsNeeded.add(WRITE_EXTERNAL_STORAGE);
         }
+
+        if (contactPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(WRITE_CONTACTS);
+        }
+
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),
                     PERMISSION_REQUEST_CODE);
@@ -118,10 +124,23 @@ public class MainActivity extends AppCompatActivity {
                 } else if (ActivityCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     TAB2_PERMISSION = false;
                     Toast.makeText(this, "FlagUp Requires Access to Your Storage.", Toast.LENGTH_SHORT).show();
+                } else if (ActivityCompat.checkSelfPermission(this, WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                  Toast.makeText(this, "FlagUp Requires Access to Your Contact.", Toast.LENGTH_SHORT).show();
                 } else {
                     TAB2_PERMISSION = true;
                 }
                 break;
         }
+    }
+
+    public void replaceFragments(String imgPath) {
+        ImageDetailFragment newFragment = ImageDetailFragment.newInstance(imgPath, this);
+        FragmentTransaction transaction = fm.beginTransaction();
+
+        transaction.replace(R.id.fragment_second, newFragment, null);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
     }
 }

@@ -1,7 +1,9 @@
 package com.example.myapplication.ui.tab;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.myapplication.ImageDetailActivity;
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 
 import java.io.File;
@@ -22,12 +25,14 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     // adapter 에 들어갈 list
     private ArrayList<String> imagePaths;
     private Context context;
+    private Activity activity;
     //private OnItemClickEventListener mItemClickListener;
 
     // constructor
-    public RecyclerviewAdapter(Context context, ArrayList<String> imagePaths) {
+    public RecyclerviewAdapter(Context context, ArrayList<String> imagePaths, Activity activity) {
         this.context = context;
         this.imagePaths = imagePaths;
+        this.activity = activity;
     }
 
     @NonNull
@@ -64,13 +69,14 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 public void onClick(View v) {
 
                     // inside on click listener we are creating a new intent
-                    Intent i = new Intent(context, ImageDetailActivity.class);
+                    // Intent i = new Intent(context, ImageDetailActivity.class);
 
                     // on below line we are passing the image path to our new activity.
-                    i.putExtra("imagePath", imagePaths.get(holder.getAdapterPosition()));
+                    // i.putExtra("imagePath", imagePaths.get(holder.getAdapterPosition()));
 
                     // at last we are starting our activity.
-                    context.startActivity(i);
+                    // context.startActivity(i);
+                    ((MainActivity)activity).replaceFragments(imagePaths.get(holder.getAdapterPosition()));
                 }
             });
         }
