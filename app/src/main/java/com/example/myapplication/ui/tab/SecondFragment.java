@@ -1,27 +1,20 @@
-package com.example.myapplication;
+package com.example.myapplication.ui.tab;
 
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.app.Activity.RESULT_OK;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,14 +24,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
@@ -46,7 +36,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.SimpleTimeZone;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,19 +61,17 @@ public class SecondFragment extends Fragment {
     private RecyclerviewAdapter adapter;
     private RecyclerView recyclerView;
     private MainActivity activity;
-    private ImageView newImg;
 
     private ArrayList<String> imagePaths = new ArrayList<String>();
 
-    private static final int PERMISSION_REQUEST_CODE = 200;
+    private static boolean PERMISSION;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final int PICK_FROM_CAMERA = 2;
 
-    File tempFile = null;
     String currentPhotoPath;
 
-    public SecondFragment() {
+    public SecondFragment(boolean PERMISSION) {
         // Required empty public constructor
+        this.PERMISSION = PERMISSION;
     }
 
     /**
@@ -96,7 +84,7 @@ public class SecondFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static SecondFragment newInstance(String param1, String param2) {
-        SecondFragment fragment = new SecondFragment();
+        SecondFragment fragment = new SecondFragment(PERMISSION);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -133,7 +121,6 @@ public class SecondFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_second, container, false);
-        newImg = view.findViewById(R.id.iv_icon);
 
         FloatingActionButton button = (FloatingActionButton)view.findViewById(R.id.cameraBtn);
         button.setOnClickListener(new View.OnClickListener() {
@@ -153,7 +140,11 @@ public class SecondFragment extends Fragment {
 
         // we are calling a method to request
         // the permissions to read external storage.
-        requestPermissions();
+        // requestPermissions();
+
+        if (PERMISSION) {
+            getImagePath();
+        }
 
         recyclerView.setAdapter(adapter);
 
@@ -217,14 +208,10 @@ public class SecondFragment extends Fragment {
 
     private void galleryAddPic() {
         File f = new File(currentPhotoPath);
-
         MediaScannerConnection.scanFile(mContext, new String[]{f.toString()}, null, null);
     }
 
-    private void updateImageView() {
-
-    }
-
+    /*
     private void requestPermissions() {
         if (ActivityCompat.checkSelfPermission(activity, WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             // if the permissions are already granted we are calling
@@ -242,6 +229,7 @@ public class SecondFragment extends Fragment {
         // on below line we are requesting the rea external storage permissions.
         ActivityCompat.requestPermissions(requireActivity(), new String[]{WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
     }
+    */
 
     private void getImagePath() {
         // in this method we are adding all our image paths
@@ -288,6 +276,43 @@ public class SecondFragment extends Fragment {
         }
     }
 
+    /*
+    // function to check permission
+    private boolean checkAndRequestPermissions() {
+        int WExtstorePermission = ActivityCompat.checkSelfPermission(activity, WRITE_EXTERNAL_STORAGE);
+        int cameraPermission = ActivityCompat.checkSelfPermission(activity, CAMERA);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+
+        if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(WRITE_EXTERNAL_STORAGE);
+        }
+        if (WExtstorePermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(WRITE_EXTERNAL_STORAGE);
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(activity, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),
+                    PERMISSION_REQUEST_CODE);
+            return false;
+        }
+        return true;
+    }
+
+    // handled permission result
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch(requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                if(ActivityCompat.checkSelfPermission(activity, CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(mContext, "FlagUp Requires Access to Camera.", Toast.LENGTH_SHORT);
+                } else if (ActivityCompat.checkSelfPermission(mContext, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(mContext, "FlagUp Requires Access to Your Storage.", Toast.LENGTH_SHORT).show();
+                } else {
+                    getImagePath();
+                }
+                break;
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         // this method is called after permissions has benn granted.
@@ -326,4 +351,5 @@ public class SecondFragment extends Fragment {
 
         }
     }
+    */
 }

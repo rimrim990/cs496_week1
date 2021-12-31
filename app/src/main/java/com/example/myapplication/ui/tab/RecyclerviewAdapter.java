@@ -1,19 +1,18 @@
-package com.example.myapplication;
+package com.example.myapplication.ui.tab;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.myapplication.ImageDetailActivity;
+import com.example.myapplication.R;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -77,16 +76,6 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    /*
-    public interface OnItemClickEventListener {
-        void onItemClick(View view, int pos);
-    }
-
-    public void setOnItemClickListener(OnItemClickEventListener listener) {
-        mItemClickListener = listener;
-    }
-    */
-
     @Override
     public int getItemCount() {
         // return listData.size();
@@ -95,7 +84,6 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     void addItem(String imagePath) {
         // 외부에서 item 을 추가시킬 함수
-        //listData.add(item);
         imagePaths.add(imagePath);
     }
 }
