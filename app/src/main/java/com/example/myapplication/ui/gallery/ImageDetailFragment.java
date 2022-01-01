@@ -59,7 +59,11 @@ public class ImageDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 <<<<<<< HEAD
+<<<<<<< HEAD
         View view = inflater.inflate(R.layout.fragment_image_detail, container, false);
+=======
+        View view = inflater.inflate(R.layout.activity_image_detail, container, false);
+>>>>>>> 7c8d952 (gallery finish)
 =======
         View view = inflater.inflate(R.layout.activity_image_detail, container, false);
 >>>>>>> 7c8d952 (gallery finish)

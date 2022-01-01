@@ -43,6 +43,7 @@
             </intent-filter>
         </activity>
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         <activity android:name=".RingActivity">
         </activity>
@@ -57,6 +58,8 @@
 
         <service android:name=".ui.alarm.AlarmService" />
         <service android:name=".ui.alarm.RescheduleAlarmService" />
+=======
+>>>>>>> 7c8d952 (gallery finish)
 =======
 >>>>>>> 7c8d952 (gallery finish)
     </application>
