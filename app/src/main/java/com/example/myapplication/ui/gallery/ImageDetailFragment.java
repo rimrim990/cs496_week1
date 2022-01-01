@@ -58,7 +58,7 @@ public class ImageDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.activity_image_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_image_detail, container, false);
         fullView = (ImageView)view.findViewById(R.id.full_iv_icon);
 
         fullView.setOnTouchListener(new View.OnTouchListener() {
