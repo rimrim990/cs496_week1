@@ -28,6 +28,9 @@
                 android:resource="@xml/file_paths"/>
         </provider>
         <activity
+            android:name=".ui.main.HelpFirstActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"

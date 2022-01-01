@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.WRITE_CONTACTS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -77,7 +78,9 @@ public class MainActivity extends AppCompatActivity {
     private void checkAndRequestPermissions() {
         int WExtstorePermission = ActivityCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE);
         int cameraPermission = ActivityCompat.checkSelfPermission(this, CAMERA);
-        int contactPermission = ActivityCompat.checkSelfPermission(this, WRITE_CONTACTS);
+        int WcontactPermission = ActivityCompat.checkSelfPermission(this, WRITE_CONTACTS);
+        int RcontactPermission = ActivityCompat.checkSelfPermission(this, READ_CONTACTS);
+
         List<String> listPermissionsNeeded = new ArrayList<>();
 
         if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
@@ -87,8 +90,12 @@ public class MainActivity extends AppCompatActivity {
             listPermissionsNeeded.add(WRITE_EXTERNAL_STORAGE);
         }
 
-        if (contactPermission != PackageManager.PERMISSION_GRANTED) {
+        if (WcontactPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(WRITE_CONTACTS);
+        }
+
+        if (RcontactPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(READ_CONTACTS);
         }
 
         if (!listPermissionsNeeded.isEmpty()) {
