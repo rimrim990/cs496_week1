@@ -6,18 +6,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.myapplication.ui.tab.SecondFragment;
+import com.example.myapplication.ui.gallery.SecondFragment;
 
 public class FragmentAdapter extends FragmentStateAdapter{
-    private boolean TAB2_PERMISSION;
-    private boolean TAB1_PERMISSION;
 
-    public FragmentAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle,
-                           boolean TAB1_PERMISSION, boolean TAB2_PERMISSION) {
+    public FragmentAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
-
-        this.TAB1_PERMISSION = TAB1_PERMISSION;
-        this.TAB2_PERMISSION = TAB2_PERMISSION;
     }
 
     @NonNull

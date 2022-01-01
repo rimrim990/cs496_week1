@@ -38,9 +38,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ImageDetailActivity"
-            android:parentActivityName=".MainActivity"
-            />
     </application>
 </manifest>

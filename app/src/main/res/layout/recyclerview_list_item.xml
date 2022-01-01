@@ -11,7 +11,6 @@
             android:id="@+id/iv_icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:background="#FFD9FA" />
+            android:adjustViewBounds="true" />
 
 </LinearLayout>

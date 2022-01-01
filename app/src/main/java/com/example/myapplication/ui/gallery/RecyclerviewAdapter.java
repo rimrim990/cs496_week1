@@ -1,19 +1,18 @@
-package com.example.myapplication.ui.tab;
+package com.example.myapplication.ui.gallery;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.myapplication.ImageDetailActivity;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 
@@ -24,9 +23,9 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     // adapter 에 들어갈 list
     private ArrayList<String> imagePaths;
+    private ArrayList<Integer> deletePos;
     private Context context;
     private Activity activity;
-    //private OnItemClickEventListener mItemClickListener;
 
     // constructor
     public RecyclerviewAdapter(Context context, ArrayList<String> imagePaths, Activity activity) {
@@ -67,16 +66,25 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    // inside on click listener we are creating a new intent
-                    // Intent i = new Intent(context, ImageDetailActivity.class);
-
-                    // on below line we are passing the image path to our new activity.
-                    // i.putExtra("imagePath", imagePaths.get(holder.getAdapterPosition()));
-
-                    // at last we are starting our activity.
-                    // context.startActivity(i);
                     ((MainActivity)activity).replaceFragments(imagePaths.get(holder.getAdapterPosition()));
+                }
+            });
+
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    if(imgFile.exists()) {
+                        imgFile.delete();
+                        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(imagePaths.get(holder.getAdapterPosition())))));
+
+                        imagePaths.remove(holder.getAdapterPosition());
+                        notifyDataSetChanged();
+
+                        Toast.makeText(context, "image deleted", Toast.LENGTH_SHORT).show();
+                    }
+
+                    return true;
                 }
             });
         }
@@ -84,7 +92,6 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        // return listData.size();
         return imagePaths.size();
     }
 

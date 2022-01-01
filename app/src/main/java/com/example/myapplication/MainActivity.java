@@ -5,29 +5,18 @@ import static android.Manifest.permission.WRITE_CONTACTS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import android.content.pm.PackageManager;
-import android.media.Image;
 import android.os.Bundle;
 
-import com.example.myapplication.ui.tab.ImageDetailFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.myapplication.ui.gallery.ImageDetailFragment;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
-
 //import com.example.myapplication.ui.main.SectionsPagerAdapter;
-import com.example.myapplication.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +27,6 @@ public class MainActivity extends AppCompatActivity {
     ViewPager2 pager2;
     FragmentAdapter adapter;
     FragmentManager fm;
-
-    private boolean TAB1_PERMISSION = true;
-    private boolean TAB2_PERMISSION = true;
 
     private static final int PERMISSION_REQUEST_CODE = 200;
 
@@ -53,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         pager2 = findViewById(R.id.view_pager2);
 
         fm = getSupportFragmentManager();
-        adapter = new FragmentAdapter(fm, getLifecycle(), TAB1_PERMISSION, TAB2_PERMISSION);
+        adapter = new FragmentAdapter(fm, getLifecycle());
         pager2.setAdapter(adapter);
 
         tabLayout.addTab(tabLayout.newTab().setText("Contacts"));
@@ -111,30 +97,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // handled permission result
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode) {
-            case PERMISSION_REQUEST_CODE:
-                if (ActivityCompat.checkSelfPermission(this, CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    TAB2_PERMISSION = false;
-                    Toast.makeText(this, "FlagUp Requires Access to Camera.", Toast.LENGTH_SHORT);
-                } else if (ActivityCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    TAB2_PERMISSION = false;
-                    Toast.makeText(this, "FlagUp Requires Access to Your Storage.", Toast.LENGTH_SHORT).show();
-                } else if (ActivityCompat.checkSelfPermission(this, WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                  Toast.makeText(this, "FlagUp Requires Access to Your Contact.", Toast.LENGTH_SHORT).show();
-                } else {
-                    TAB2_PERMISSION = true;
-                }
-                break;
-        }
-    }
-
     public void replaceFragments(String imgPath) {
-        ImageDetailFragment newFragment = ImageDetailFragment.newInstance(imgPath, this);
+        ImageDetailFragment newFragment = ImageDetailFragment.newInstance(imgPath);
         FragmentTransaction transaction = fm.beginTransaction();
 
         transaction.replace(R.id.fragment_second, newFragment, null);
