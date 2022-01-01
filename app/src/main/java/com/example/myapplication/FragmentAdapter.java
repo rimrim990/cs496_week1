@@ -6,13 +6,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-import com.example.myapplication.ui.alarm.ThirdFragment;
-=======
->>>>>>> 7c8d952 (gallery finish)
-=======
->>>>>>> 7c8d952 (gallery finish)
 import com.example.myapplication.ui.gallery.SecondFragment;
 
 public class FragmentAdapter extends FragmentStateAdapter{
