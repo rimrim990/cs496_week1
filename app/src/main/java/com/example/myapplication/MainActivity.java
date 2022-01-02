@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPager2 pager2;
     FragmentAdapter adapter;
     FragmentManager fm;
+    boolean isPermissionGiven = false;
 
     private static final int PERMISSION_REQUEST_CODE = 200;
 
@@ -72,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        if (isPermissionGiven) {
+            setAdapter();
+        }
 
     }
 
@@ -92,26 +96,60 @@ public class MainActivity extends AppCompatActivity {
 
         if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(CAMERA);
+            isPermissionGiven = false;
         }
         if (WExtstorePermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(WRITE_EXTERNAL_STORAGE);
+            isPermissionGiven = false;
         }
 
         if (WcontactPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(WRITE_CONTACTS);
+            isPermissionGiven = false;
         }
 
         if (RcontactPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(READ_CONTACTS);
+            isPermissionGiven = false;
         }
 
         if (VibratePermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(VIBRATE);
+            isPermissionGiven = false;
         }
 
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),
                     PERMISSION_REQUEST_CODE);
+        } else {
+            isPermissionGiven = true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                boolean isPermissionAllGranted = false;
+
+                if (grantResults.length > 0 && permissions.length == grantResults.length) {
+                    for (int i = 0; i < permissions.length; i++) {
+                        if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                            isPermissionAllGranted = true;
+                        } else {
+                            isPermissionAllGranted = false;
+                        }
+                    }
+                } else {
+                    isPermissionAllGranted = true;
+                }
+
+                if (isPermissionAllGranted) {
+                    setAdapter();
+                }
+                break;
         }
     }
 
