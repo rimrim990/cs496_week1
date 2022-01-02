@@ -11,7 +11,9 @@
         android:id="@+id/contactsRecView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/editTextName"/>
+        android:layout_above="@+id/editTextName"
+        android:scrollbarFadeDuration="0"
+        android:scrollbarSize="5dp" />
 
     <Button
         android:id="@+id/addButton"
