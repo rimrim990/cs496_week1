@@ -15,6 +15,14 @@
 
     <!--Added Toggle Button to set the alarm on or off-->
     <!--ByDefault toggleButton is set to false-->
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="No Alarm Set"
+        android:textSize="32dp"/>
+
     <ToggleButton
         android:id="@+id/toggleButton"
         android:layout_width="wrap_content"

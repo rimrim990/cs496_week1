@@ -13,12 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.myapplication.ui.alarm.AlarmReceiver;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 
 /**
@@ -32,6 +34,7 @@ public class ThirdFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private TextView mTextView;
     TimePicker alarmTimePicker;
     PendingIntent pendingIntent;
     AlarmManager alarmManager;
@@ -81,6 +84,7 @@ public class ThirdFragment extends Fragment {
         alarmTimePicker = (TimePicker) mView.findViewById(R.id.timePicker);
         alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
 
+        mTextView = mView.findViewById(R.id.textView);
         ToggleButton toggleButton = mView.findViewById(R.id.toggleButton);
 
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -110,12 +114,17 @@ public class ThirdFragment extends Fragment {
                         else
                             time = time + (1000 * 60 * 60 * 24);
                     }
+                    String timeText = "Alarm set for: ";
+                    timeText += DateFormat.getTimeInstance(DateFormat.SHORT).format(calendar.getTime());
+                    mTextView.setText(timeText);
+
                     // Alarm rings continuously until toggle button is turned off
                     alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, time, 10000, pendingIntent);
                     // alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (time * 1000), pendingIntent);
                 }
                 else{
                     alarmManager.cancel(pendingIntent);
+                    mTextView.setText("Alarm Canceled");
                     Toast.makeText(getActivity(), "ALARM OFF", Toast.LENGTH_SHORT).show();
                 }
             }
