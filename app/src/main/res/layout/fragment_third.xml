@@ -21,7 +21,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="20dp"
-        android:checked="false"/>
+        android:checked="false"
+        android:textOff="Alarm on"
+        android:textOn="Alarm off"/>
 <!--        android:onClick="OnToggleClicked" />-->
 
     <!--"OnToggleClicked" method will be implemented in MainActivity.java -->

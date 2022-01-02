@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_CONTACTS;
+import static android.Manifest.permission.VIBRATE;
 import static android.Manifest.permission.WRITE_CONTACTS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -36,12 +37,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        checkAndRequestPermissions();
+
         tabLayout = findViewById(R.id.tabs);
         pager2 = findViewById(R.id.view_pager2);
 
         fm = getSupportFragmentManager();
-        adapter = new FragmentAdapter(fm, getLifecycle());
-        pager2.setAdapter(adapter);
 
         tabLayout.addTab(tabLayout.newTab().setText("Contacts"));
         tabLayout.addTab(tabLayout.newTab().setText("Gallery"));
@@ -71,7 +72,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        checkAndRequestPermissions();
+
+    }
+
+    private void setAdapter() {
+        adapter = new FragmentAdapter(fm, getLifecycle());
+        pager2.setAdapter(adapter);
     }
 
     // function to check permission
@@ -80,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         int cameraPermission = ActivityCompat.checkSelfPermission(this, CAMERA);
         int WcontactPermission = ActivityCompat.checkSelfPermission(this, WRITE_CONTACTS);
         int RcontactPermission = ActivityCompat.checkSelfPermission(this, READ_CONTACTS);
+        int VibratePermission = ActivityCompat.checkSelfPermission(this, VIBRATE);
 
         List<String> listPermissionsNeeded = new ArrayList<>();
 
@@ -96,6 +103,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (RcontactPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(READ_CONTACTS);
+        }
+
+        if (VibratePermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(VIBRATE);
         }
 
         if (!listPermissionsNeeded.isEmpty()) {
