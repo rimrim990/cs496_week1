@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,10 +18,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.myapplication.ui.main.ContactsRecViewAdapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,6 +40,7 @@ public class FirstFragment extends Fragment {
 
     public static RecyclerView contactsRecView;
     public static ArrayList<Contact> contacts = new ArrayList<>();
+    private ContactsRecViewAdapter adapter;
     private EditText editTextName;
     private EditText editTextNumber;
 
@@ -67,45 +73,15 @@ public class FirstFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//
-//        contactsRecView = findViewById(R.id.contactsRecView);
-//
-////        contacts.add(new Contact("Margot Robbie", "010-1234-0000"));
-////        contacts.add(new Contact("Cillian Murphy", "010-1234-1111"));
-////        contacts.add(new Contact("Saoirse Ronan", "010-1234-2222"));
-////        contacts.add(new Contact("Emma Watson", "010-1234-3333"));
-////        contacts.add(new Contact("Cristian Bail", "010-1234-4444"));
-//
-//        contacts = getContacts(get);
-//
-//        ContactsRecViewAdapter adapter = new ContactsRecViewAdapter(this);
-//        adapter.setContacts(contacts);
-//
-//        contactsRecView.setAdapter(adapter);
-//        contactsRecView.setLayoutManager(new LinearLayoutManager(this));
-//
-//        editTextName = findViewById(R.id.editTextName);
-//        editTextNumber = findViewById(R.id.editTextNumber);
-//
-//        findViewById(R.id.addButton).setOnClickListener(view -> {
-//            String newName = editTextName.getText().toString();
-//            String newNumber = editTextNumber.getText().toString();
-//            Contact newContact = new Contact(newName, newNumber);
-//            contacts.add(newContact);
-//            adapter.notifyItemInserted(contacts.size()-1);
-//
-//            Intent contactIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
-//            contactIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
-//
-//            contactIntent
-//                    .putExtra(ContactsContract.Intents.Insert.NAME, newName)
-//                    .putExtra(ContactsContract.Intents.Insert.PHONE, newNumber);
-//
-//            startActivity(contactIntent);
-//        });
     }
 
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+////        contacts = getContacts(getActivity());
+//        contactsRecView.setAdapter(adapter);
+//    }
 
     public ArrayList<Contact> getContacts(Context context){
         ContentResolver resolver = context.getContentResolver();
@@ -152,15 +128,9 @@ public class FirstFragment extends Fragment {
 
         contactsRecView = mView.findViewById(R.id.contactsRecView);
 
-//        contacts.add(new Contact("Margot Robbie", "010-1234-0000"));
-//        contacts.add(new Contact("Cillian Murphy", "010-1234-1111"));
-//        contacts.add(new Contact("Saoirse Ronan", "010-1234-2222"));
-//        contacts.add(new Contact("Emma Watson", "010-1234-3333"));
-//        contacts.add(new Contact("Cristian Bail", "010-1234-4444"));
-
         contacts = getContacts(getActivity());
 
-        ContactsRecViewAdapter adapter = new ContactsRecViewAdapter(getActivity());
+        adapter = new ContactsRecViewAdapter(getActivity());
         adapter.setContacts(contacts);
 
         contactsRecView.setAdapter(adapter);
@@ -184,6 +154,7 @@ public class FirstFragment extends Fragment {
                     .putExtra(ContactsContract.Intents.Insert.PHONE, newNumber);
 
             startActivity(contactIntent);
+//            adapter.notifyDataSetChanged();
         });
 
         return mView;

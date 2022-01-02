@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 public class HelpFirstActivity extends AppCompatActivity {
     public int position;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,21 +36,8 @@ public class HelpFirstActivity extends AppCompatActivity {
 
         TextView textView1 = (TextView) findViewById(R.id.textview1);
         TextView textView2 = (TextView) findViewById(R.id.textview2);
-//        ImageButton deleteButton = (ImageButton) findViewById(R.id.deleteButton);
-
-
-//        deleteButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ContactsRecViewAdapter.removeItem(position);
-//            }
-//        });
 
         textView1.setText(text1);
         textView2.setText(text2);
     }
-
-//    public void onClick(View v) {
-//        ContactsRecViewAdapter.removeItem();
-//    }
 }

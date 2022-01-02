@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout.addTab(tabLayout.newTab().setText("Contacts"));
         tabLayout.addTab(tabLayout.newTab().setText("Gallery"));
-        tabLayout.addTab(tabLayout.newTab().setText("Not Yet"));
+        tabLayout.addTab(tabLayout.newTab().setText("Alarm"));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
