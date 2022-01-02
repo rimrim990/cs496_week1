@@ -19,6 +19,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.myapplication.ui.alarm.AlarmReceiver;
+import com.example.myapplication.ui.alarm.AlarmService;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -124,6 +125,10 @@ public class ThirdFragment extends Fragment {
                 }
                 else{
                     alarmManager.cancel(pendingIntent);
+
+                    Intent stopIntent = new Intent(getActivity(), AlarmService.class);
+                    getActivity().stopService(stopIntent);
+
                     mTextView.setText("Alarm Canceled");
                     Toast.makeText(getActivity(), "ALARM OFF", Toast.LENGTH_SHORT).show();
                 }

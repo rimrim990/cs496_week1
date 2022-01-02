@@ -19,19 +19,25 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         // we will use vibrator first
-        Vibrator vibrator = (Vibrator) context.getSystemService(context.VIBRATOR_SERVICE);
-        vibrator.vibrate(4000);
+        // Vibrator vibrator = (Vibrator) context.getSystemService(context.VIBRATOR_SERVICE);
+        // vibrator.vibrate(4000);
 
         Toast.makeText(context, "Alarm! Wake up! Wake up!", Toast.LENGTH_LONG).show();
-        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        if (alarmUri == null) {
-            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        }
+        // Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        // if (alarmUri == null) {
+        //     alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        // }
 
         // setting default ringtone
-        Ringtone ringtone = RingtoneManager.getRingtone(context, alarmUri);
+        // Ringtone ringtone = RingtoneManager.getRingtone(context, alarmUri);
+        startAlarmService(context, intent);
 
         // play ringtone
-        ringtone.play();
+        // ringtone.play();
+    }
+
+    private void startAlarmService(Context context, Intent intent) {
+        Intent intentService = new Intent(context, AlarmService.class);
+        context.startService(intentService);
     }
 }

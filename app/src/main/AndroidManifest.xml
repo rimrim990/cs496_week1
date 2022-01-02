@@ -45,5 +45,6 @@
         <receiver
             android:name=".ui.alarm.AlarmReceiver">
         </receiver>
+        <service android:name=".ui.alarm.AlarmService" />
     </application>
 </manifest>
