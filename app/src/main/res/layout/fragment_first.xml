@@ -48,10 +48,10 @@
         android:id="@+id/editTextSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
         android:layout_above="@+id/addButton"
         android:layout_centerHorizontal="true"
-        android:hint="SEARCH" />
+        android:ems="10"
+        android:hint="SEARCH"
+        android:inputType="textPersonName" />
 
 </RelativeLayout>

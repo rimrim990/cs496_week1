@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.ContactsContract;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +49,7 @@ public class FirstFragment extends Fragment {
     private ContactsRecViewAdapter adapter;
     private EditText editTextName;
     private EditText editTextNumber;
+    private EditText editTextSearch;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -161,6 +164,24 @@ public class FirstFragment extends Fragment {
 
         editTextName = mView.findViewById(R.id.editTextName);
         editTextNumber = mView.findViewById(R.id.editTextNumber);
+        editTextSearch = mView.findViewById(R.id.editTextSearch);
+
+        editTextSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filter(editable.toString());
+            }
+        });
 
         mView.findViewById(R.id.addButton).setOnClickListener(view -> {
             Button addButton = (Button) getActivity().findViewById(R.id.addButton);
@@ -253,5 +274,18 @@ public class FirstFragment extends Fragment {
         });
 
         return mView;
+    }
+
+    private void filter(String text) {
+        ArrayList<Contact> filteredList = new ArrayList<>();
+
+        for (Contact item: contacts) {
+            if(item.getName().toLowerCase().contains(text.toLowerCase())){
+                filteredList.add(item);
+            }
+        }
+
+        adapter.filterList(filteredList);
+
     }
 }
