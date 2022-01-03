@@ -56,18 +56,19 @@ public class ContactsRecViewAdapter extends RecyclerView.Adapter<ContactsRecView
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.txtName.setText(contacts.get(position).getName());
         holder.txtNumber.setText(contacts.get(position).getNumber());
+
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, contacts.get(position).getName() + " is " + contacts.get(position).getNumber(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, contacts.get(holder.getAdapterPosition()).getName() + " is " + contacts.get(holder.getAdapterPosition()).getNumber(), Toast.LENGTH_SHORT).show();
 
-                String text1 = contacts.get(position).getName();
-                String text2 = contacts.get(position).getNumber();
+                String text1 = contacts.get(holder.getAdapterPosition()).getName();
+                String text2 = contacts.get(holder.getAdapterPosition()).getNumber();
 
                 Intent intent = new Intent(context, HelpFirstActivity.class);
                 intent.putExtra(EXTRA_TEXT_1, text1);
                 intent.putExtra(EXTRA_TEXT_2, text2);
-                intent.putExtra(EXTRA_TEXT_3, position);
+                intent.putExtra(EXTRA_TEXT_3, holder.getAdapterPosition());
 
                 context.startActivity(intent);
             }
@@ -116,9 +117,6 @@ public class ContactsRecViewAdapter extends RecyclerView.Adapter<ContactsRecView
 
 
                 boolean b = deleteContact(context, deletedContact.getNumber(), deletedContact.getName());
-
-
-
 
             });
 

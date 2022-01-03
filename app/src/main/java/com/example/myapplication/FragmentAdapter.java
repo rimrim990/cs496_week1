@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.myapplication.ui.alarm.AlarmListFragment;
 import com.example.myapplication.ui.gallery.SecondFragment;
 
 public class FragmentAdapter extends FragmentStateAdapter{
@@ -23,7 +24,7 @@ public class FragmentAdapter extends FragmentStateAdapter{
             case 1:
                 return new SecondFragment();
             case 2:
-                return new ThirdFragment();
+                return new AlarmListFragment();
         }
         return new FirstFragment();
     }

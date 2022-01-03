@@ -9,6 +9,9 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import com.example.myapplication.ui.alarm.Alarm;
+import com.example.myapplication.ui.alarm.AlarmListFragment;
+import com.example.myapplication.ui.alarm.CreateAlarmFragment;
 import com.example.myapplication.ui.gallery.ImageDetailFragment;
 import com.google.android.material.tabs.TabLayout;
 
@@ -162,5 +165,21 @@ public class MainActivity extends AppCompatActivity {
 
         // Commit the transaction
         transaction.commit();
+    }
+
+    public void alarmListToCreateAlarm(ArrayList<Alarm> alarms) {
+        CreateAlarmFragment newFragment = CreateAlarmFragment.newInstance(alarms);
+        FragmentTransaction transaction = fm.beginTransaction();
+
+        transaction.replace(R.id.fragment_alarm, newFragment, null);
+        transaction.addToBackStack(null);
+
+        transaction.commit();
+    }
+
+    public void popBackStack() {
+        if (fm.getBackStackEntryCount() > 0) {
+            fm.popBackStack();
+        }
     }
 }
