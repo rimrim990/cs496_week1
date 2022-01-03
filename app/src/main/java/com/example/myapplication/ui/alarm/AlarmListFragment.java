@@ -1,11 +1,14 @@
 package com.example.myapplication.ui.alarm;
 
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +23,7 @@ import com.example.myapplication.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class AlarmListFragment extends Fragment {
     private AlarmRecyclerviewAdapter alarmRecyclerViewAdapter;
@@ -63,8 +67,33 @@ public class AlarmListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Navigation.findNavController(v).navigate(R.id.action_alarmsListFragment_to_createAlarmFragment);
-                ((MainActivity)getActivity()).alarmListToCreateAlarm(alarms);
-                addAlarm.setVisibility(View.GONE);
+                // ((MainActivity)getActivity()).alarmListToCreateAlarm(alarms);
+                // addAlarm.setVisibility(View.GONE);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                View alarmView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_create_alarm, null, false);
+                builder.setView(alarmView);
+
+                TimePicker timePicker = (TimePicker) alarmView.findViewById(R.id.fragment_createalarm_timePicker);
+                EditText title = (EditText) alarmView.findViewById(R.id.fragment_createalarm_title);
+                Button scheduleAlarm = (Button) alarmView.findViewById(R.id.fragment_createalarm_scheduleAlarm);
+
+                final AlertDialog dialog = builder.create();
+                scheduleAlarm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String alarmTitle = title.getText().toString();
+                        int curHour = timePicker.getCurrentHour();
+                        int curMinute = timePicker.getCurrentMinute();
+
+                        scheduleAlarm(curHour, curMinute, alarmTitle);
+                        alarmRecyclerViewAdapter.notifyDataSetChanged();
+
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
             }
         });
 
@@ -81,5 +110,22 @@ public class AlarmListFragment extends Fragment {
             alarmRecyclerViewAdapter.setAlarm(alarm);
             // alarmsListViewModel.update(alarm);
         }
+    }
+
+    private void scheduleAlarm(int hour, int minute, String title) {
+        int alarmId = new Random().nextInt(Integer.MAX_VALUE);
+
+        Alarm alarm = new Alarm(
+                alarmId,
+                hour,
+                minute,
+                true,
+                title
+        );
+
+        alarm.schedule(getContext());
+        alarms.add(alarm);
+
+        PreferenceManager.setAlarms(getActivity(), ARG_ALARM_LIST, alarms);
     }
 }

@@ -45,7 +45,7 @@ public class Alarm {
 
         Intent intent = new Intent(context, AlarmReceiver.class);
 
-        intent.putExtra("title", title);
+        intent.putExtra("TITLE", title);
 
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, 0);
 

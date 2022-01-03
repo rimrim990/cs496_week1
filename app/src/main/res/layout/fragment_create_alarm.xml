@@ -67,6 +67,7 @@
             android:id="@+id/fragment_createalarm_scheduleAlarm"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:text="Schedule Alarm"
             android:layout_gravity="bottom|end" />
 
     </LinearLayout>

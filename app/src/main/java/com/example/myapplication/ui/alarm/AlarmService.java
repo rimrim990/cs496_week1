@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.alarm;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -25,11 +26,15 @@ public class AlarmService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Intent notificationIntent = new Intent(this, RingActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
         Uri ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (ringtoneUri == null) {
             ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         }
+
+        String alarmTitle = String.format("%s Alarm", intent.getStringExtra("TITLE"));
 
         ringtone = RingtoneManager.getRingtone(this, ringtoneUri);
         ringtone.play();
