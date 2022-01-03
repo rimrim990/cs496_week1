@@ -150,31 +150,4 @@ public class ContactsRecViewAdapter extends RecyclerView.Adapter<ContactsRecView
         return false;
     }
 
-//    public void deleteContact(Context context, String localContactId)
-//    {
-//        ContentResolver cr = context.getContentResolver();
-//        String rawWhere = ContactsContract.Contacts._ID + " = ? ";
-//        String[] whereArgs1 = new String[]{localContactId};
-//        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
-//                null, rawWhere, whereArgs1, null);
-//
-//        if(cur != null && cur.getCount() > 0) {
-//            while (cur.moveToNext()) {
-//                try{
-//                    String lookupKey = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
-//                    Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookupKey);
-//                    cr.delete(uri, null, null);
-//                }
-//                catch(Exception e)
-//                {
-//                    System.out.println(e.getStackTrace());
-//                }
-//            }
-//        }
-//        if(cur != null)
-//            cur.close();
-//    }
-
-
-
 }

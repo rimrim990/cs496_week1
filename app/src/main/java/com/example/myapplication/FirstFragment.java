@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -26,6 +28,7 @@ import com.example.myapplication.ui.main.ContactsRecViewAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -98,6 +101,7 @@ public class FirstFragment extends Fragment {
 
         // 4. 커서로 리턴된다. 반복문을 돌면서 cursor 에 담긴 데이터를 하나씩 추출
         if(cursor != null){
+            HashSet<Contact> contactHashSet = new HashSet<>();
             while(cursor.moveToNext()){
                 // 4.1 이름으로 인덱스를 찾아준다
                 int idIndex = cursor.getColumnIndex(projection[0]); // 이름을 넣어주면 그 칼럼을 가져와준다.
@@ -114,12 +118,30 @@ public class FirstFragment extends Fragment {
                 phoneContact.setNumber(number);
                 phoneContact.setId(id);
 
-                contacts.add(phoneContact);
+                if(!contactHashSet.contains(phoneContact)){
+                    contacts.add(phoneContact);
+                    contactHashSet.add(phoneContact);
+                }
+                else{
+                    Log.d("TAG", "there is a duplicate");
+                    continue;
+                }
+//                contacts.add(phoneContact);
             }
         }
         cursor.close();
         return contacts;
     }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        contacts = getContacts(getActivity());
+//
+//        adapter = new ContactsRecViewAdapter(getActivity());
+//        adapter.setContacts(contacts);
+//        contactsRecView.setAdapter(adapter);
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -141,21 +163,93 @@ public class FirstFragment extends Fragment {
         editTextNumber = mView.findViewById(R.id.editTextNumber);
 
         mView.findViewById(R.id.addButton).setOnClickListener(view -> {
-            String newName = editTextName.getText().toString();
-            String newNumber = editTextNumber.getText().toString();
-            Contact newContact = new Contact(newName, newNumber);
-            contacts.add(newContact);
-            adapter.notifyItemInserted(contacts.size()-1);
+            Button addButton = (Button) getActivity().findViewById(R.id.addButton);
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    View v = getLayoutInflater().inflate(R.layout.edit_box, null, false);
+                    builder.setView(v);
 
-            Intent contactIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
-            contactIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+                    final Button button_submit = (Button) v.findViewById(R.id.button_submit);
+                    final EditText editTextName = (EditText) v.findViewById(R.id.editTextName);
+                    final EditText editTextNumber = (EditText) v.findViewById(R.id.editTextNumber);
+                    final AlertDialog dialog = builder.create();
 
-            contactIntent
-                    .putExtra(ContactsContract.Intents.Insert.NAME, newName)
-                    .putExtra(ContactsContract.Intents.Insert.PHONE, newNumber);
+                    button_submit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String newName = editTextName.getText().toString();
+                            String newNumber = editTextNumber.getText().toString();
+                            Contact newContact = new Contact(newName, newNumber);
 
-            startActivity(contactIntent);
+                            int i = 0;
+                            for (; i < contacts.size(); i++) {
+                                if(contacts.get(i).getName().toLowerCase().compareTo(newName.toLowerCase()) < 0){
+                                    continue;
+                                }
+                                else{
+                                    contacts.add(i, newContact);
+                                    break;
+                                }
+                            }
+                            if(i == contacts.size()){
+                                contacts.add(newContact);
+                            }
+
+                            adapter.notifyDataSetChanged();
+
+                            Intent contactIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
+                            contactIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+
+                            contactIntent
+                                    .putExtra(ContactsContract.Intents.Insert.NAME, newName)
+                                    .putExtra(ContactsContract.Intents.Insert.PHONE, newNumber);
+
+                            startActivity(contactIntent);
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
+                }
+            });
+//            String newName = editTextName.getText().toString();
+//            String newNumber = editTextNumber.getText().toString();
+//            Contact newContact = new Contact(newName, newNumber);
+//
+//            int i = 0;
+//            for (; i < contacts.size(); i++) {
+//                if(contacts.get(i).getName().toLowerCase().compareTo(newName.toLowerCase()) < 0){
+//                    continue;
+//                }
+//                else{
+//                    contacts.add(i, newContact);
+//                    break;
+//                }
+//            }
+//            if(i == contacts.size()){
+//                contacts.add(newContact);
+//            }
+//
 //            adapter.notifyDataSetChanged();
+////            contacts.add(newContact);
+////            adapter.notifyItemInserted(contacts.size()-1);
+//
+//            Intent contactIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
+//            contactIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+//
+//            contactIntent
+//                    .putExtra(ContactsContract.Intents.Insert.NAME, newName)
+//                    .putExtra(ContactsContract.Intents.Insert.PHONE, newNumber);
+//
+//            startActivity(contactIntent);
+////            adapter.notifyDataSetChanged();
+////            contacts = getContacts(getActivity());
+////            adapter.setContacts(contacts);
+////            contactsRecView.setAdapter(adapter);
+////            adapter.notifyDataSetChanged();
+
+
         });
 
         return mView;
