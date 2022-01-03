@@ -28,16 +28,21 @@ public class Alarm {
         this.title = title;
     }
 
-    public void cancelAlarm(Context context) {
+    public void cancelAlarm(Context context, boolean isDelete) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiver.class);
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, 0);
         alarmManager.cancel(alarmPendingIntent);
         this.started = false;
 
-        String toastText = String.format("Alarm cancelled for %02d:%02d with id %d", hour, minute, alarmId);
-        Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
-        Log.i("cancel", toastText);
+        if (!isDelete) {
+            String toastText = String.format("Alarm cancelled for %02d:%02d", hour, minute);
+            Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
+            Log.i("cancel", toastText);
+        } else {
+            Toast.makeText(context, "Alarm deleted", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public void schedule(Context context) {

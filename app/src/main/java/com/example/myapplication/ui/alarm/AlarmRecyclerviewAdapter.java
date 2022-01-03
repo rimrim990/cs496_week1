@@ -1,9 +1,12 @@
 package com.example.myapplication.ui.alarm;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +43,20 @@ public class AlarmRecyclerviewAdapter extends RecyclerView.Adapter<AlarmViewHold
     public void onBindViewHolder(@NonNull AlarmViewHolder holder, int position) {
         Alarm alarm = alarms.get(position);
         holder.bind(alarm, listener);
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                alarm.cancelAlarm(view.getContext(), true);
+                deleteAlarm(alarm);
+                notifyDataSetChanged();
+
+                PreferenceManager.setAlarms(view.getContext(), "ARG_ALARM_LIST", alarms);
+                Toast.makeText(view.getContext(), "alarm deleted", Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        });
     }
 
     @Override
