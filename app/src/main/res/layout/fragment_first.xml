@@ -11,7 +11,7 @@
         android:id="@+id/contactsRecView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/editTextSearch"
+        android:layout_above="@+id/addButton"
         android:scrollbarFadeDuration="0"
         android:scrollbarSize="5dp" />
 
@@ -44,14 +44,14 @@
 <!--        android:hint="Phone-Number-->
 <!--" />-->
 
-    <EditText
-        android:id="@+id/editTextSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:layout_above="@+id/addButton"
-        android:layout_centerHorizontal="true"
-        android:hint="SEARCH" />
+<!--    <EditText-->
+<!--        android:id="@+id/editTextSearch"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:layout_above="@+id/addButton"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:hint="SEARCH" />-->
 
 </RelativeLayout>
