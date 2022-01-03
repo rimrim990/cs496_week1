@@ -6,8 +6,7 @@
     android:layout_height="wrap_content"
     android:minHeight="150dp"
     android:orientation="vertical"
-    android:padding="5dp"
-    android:background="#FFF000">
+    android:padding="5dp">
 
         <ImageView
             android:id="@+id/iv_icon"

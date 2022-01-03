@@ -12,23 +12,24 @@
 
     <TextView
         android:id="@+id/item_alarm_time"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="0.4"
         android:layout_height="wrap_content"
         android:textSize="40sp"
-        android:layout_marginRight="10dp"/>
+        android:paddingLeft="5dp"/>
     <TextView
         android:id="@+id/item_alarm_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="0.4"
         android:layout_height="wrap_content"
         android:textSize="20sp"/>
 
-    <Switch
-        android:id="@+id/item_alarm_started"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:thumbTextPadding="25dp"
-        android:padding="10dp"/>
-
-
+        <Switch
+            android:id="@+id/item_alarm_started"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:padding="10dp"
+            android:thumbTextPadding="25dp" />
 </LinearLayout>

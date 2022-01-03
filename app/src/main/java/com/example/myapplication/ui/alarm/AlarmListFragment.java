@@ -103,12 +103,13 @@ public class AlarmListFragment extends Fragment {
     public void onToggle(Alarm alarm) {
         if (alarm.getStarted()) {
             alarm.cancelAlarm(getContext());
+            //PreferenceManager.setAlarms(getActivity(), ARG_ALARM_LIST, alarms);
             alarmRecyclerViewAdapter.deleteAlarm(alarm);
             // alarmsListViewModel.update(alarm);
         } else {
             alarm.schedule(getContext());
+            //PreferenceManager.setAlarms(getActivity(), ARG_ALARM_LIST, alarms);
             alarmRecyclerViewAdapter.setAlarm(alarm);
-            // alarmsListViewModel.update(alarm);
         }
     }
 
