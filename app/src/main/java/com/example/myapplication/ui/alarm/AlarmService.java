@@ -1,5 +1,8 @@
 package com.example.myapplication.ui.alarm;
 
+import static com.example.myapplication.ui.alarm.App.CHANNEL_ID;
+
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -11,6 +14,9 @@ import android.os.IBinder;
 import android.os.Vibrator;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+
+import com.example.myapplication.R;
 
 public class AlarmService extends Service {
     private Vibrator vibrator;
@@ -36,12 +42,21 @@ public class AlarmService extends Service {
 
         String alarmTitle = String.format("%s Alarm", intent.getStringExtra("TITLE"));
 
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle(alarmTitle)
+                .setContentText("Ring Ring .. Ring Ring")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentIntent(pendingIntent)
+                .build();
+
         ringtone = RingtoneManager.getRingtone(this, ringtoneUri);
         ringtone.play();
 
         vibrator.vibrate(4000);
 
-        return START_NOT_STICKY;
+        startForeground(1, notification);
+
+        return START_STICKY;
     }
 
     @Override

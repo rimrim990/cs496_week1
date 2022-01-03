@@ -23,6 +23,8 @@ public class RingActivity  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ring);
 
+        dismiss = findViewById(R.id.activity_ring_dismiss);
+
         dismiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

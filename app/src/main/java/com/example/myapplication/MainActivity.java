@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
+import static android.Manifest.permission.CALL_PHONE;
 import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.FOREGROUND_SERVICE;
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.VIBRATE;
 import static android.Manifest.permission.WRITE_CONTACTS;
@@ -8,10 +10,8 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 
-import com.example.myapplication.ui.alarm.Alarm;
-import com.example.myapplication.ui.alarm.AlarmListFragment;
-import com.example.myapplication.ui.alarm.CreateAlarmFragment;
 import com.example.myapplication.ui.gallery.ImageDetailFragment;
 import com.google.android.material.tabs.TabLayout;
 
@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         int WcontactPermission = ActivityCompat.checkSelfPermission(this, WRITE_CONTACTS);
         int RcontactPermission = ActivityCompat.checkSelfPermission(this, READ_CONTACTS);
         int VibratePermission = ActivityCompat.checkSelfPermission(this, VIBRATE);
+        int CallPermission = ActivityCompat.checkSelfPermission(this, CALL_PHONE);
 
         List<String> listPermissionsNeeded = new ArrayList<>();
 
@@ -119,6 +120,15 @@ public class MainActivity extends AppCompatActivity {
         if (VibratePermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(VIBRATE);
             isPermissionGiven = false;
+        }
+
+        if (CallPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(CALL_PHONE);
+            isPermissionGiven = false;
+        }
+
+        for (int i=0; i < listPermissionsNeeded.size(); i++) {
+            Log.d("Permission Check", String.valueOf(listPermissionsNeeded.get(i)));
         }
 
         if (!listPermissionsNeeded.isEmpty()) {
@@ -165,21 +175,5 @@ public class MainActivity extends AppCompatActivity {
 
         // Commit the transaction
         transaction.commit();
-    }
-
-    public void alarmListToCreateAlarm(ArrayList<Alarm> alarms) {
-        CreateAlarmFragment newFragment = CreateAlarmFragment.newInstance(alarms);
-        FragmentTransaction transaction = fm.beginTransaction();
-
-        transaction.replace(R.id.fragment_alarm, newFragment, null);
-        transaction.addToBackStack(null);
-
-        transaction.commit();
-    }
-
-    public void popBackStack() {
-        if (fm.getBackStackEntryCount() > 0) {
-            fm.popBackStack();
-        }
     }
 }
