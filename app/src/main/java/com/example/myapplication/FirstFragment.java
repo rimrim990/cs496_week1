@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -161,41 +163,91 @@ public class FirstFragment extends Fragment {
         editTextNumber = mView.findViewById(R.id.editTextNumber);
 
         mView.findViewById(R.id.addButton).setOnClickListener(view -> {
-            String newName = editTextName.getText().toString();
-            String newNumber = editTextNumber.getText().toString();
-            Contact newContact = new Contact(newName, newNumber);
+            Button addButton = (Button) getActivity().findViewById(R.id.addButton);
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    View v = getLayoutInflater().inflate(R.layout.edit_box, null, false);
+                    builder.setView(v);
 
-            int i = 0;
-            for (; i < contacts.size(); i++) {
-                if(contacts.get(i).getName().toLowerCase().compareTo(newName.toLowerCase()) < 0){
-                    continue;
+                    final Button button_submit = (Button) v.findViewById(R.id.button_submit);
+                    final EditText editTextName = (EditText) v.findViewById(R.id.editTextName);
+                    final EditText editTextNumber = (EditText) v.findViewById(R.id.editTextNumber);
+                    final AlertDialog dialog = builder.create();
+
+                    button_submit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String newName = editTextName.getText().toString();
+                            String newNumber = editTextNumber.getText().toString();
+                            Contact newContact = new Contact(newName, newNumber);
+
+                            int i = 0;
+                            for (; i < contacts.size(); i++) {
+                                if(contacts.get(i).getName().toLowerCase().compareTo(newName.toLowerCase()) < 0){
+                                    continue;
+                                }
+                                else{
+                                    contacts.add(i, newContact);
+                                    break;
+                                }
+                            }
+                            if(i == contacts.size()){
+                                contacts.add(newContact);
+                            }
+
+                            adapter.notifyDataSetChanged();
+
+                            Intent contactIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
+                            contactIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+
+                            contactIntent
+                                    .putExtra(ContactsContract.Intents.Insert.NAME, newName)
+                                    .putExtra(ContactsContract.Intents.Insert.PHONE, newNumber);
+
+                            startActivity(contactIntent);
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
                 }
-                else{
-                    contacts.add(i, newContact);
-                    break;
-                }
-            }
-            if(i == contacts.size()){
-                contacts.add(newContact);
-            }
-
-            adapter.notifyDataSetChanged();
-//            contacts.add(newContact);
-//            adapter.notifyItemInserted(contacts.size()-1);
-
-            Intent contactIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
-            contactIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
-
-            contactIntent
-                    .putExtra(ContactsContract.Intents.Insert.NAME, newName)
-                    .putExtra(ContactsContract.Intents.Insert.PHONE, newNumber);
-
-            startActivity(contactIntent);
+            });
+//            String newName = editTextName.getText().toString();
+//            String newNumber = editTextNumber.getText().toString();
+//            Contact newContact = new Contact(newName, newNumber);
+//
+//            int i = 0;
+//            for (; i < contacts.size(); i++) {
+//                if(contacts.get(i).getName().toLowerCase().compareTo(newName.toLowerCase()) < 0){
+//                    continue;
+//                }
+//                else{
+//                    contacts.add(i, newContact);
+//                    break;
+//                }
+//            }
+//            if(i == contacts.size()){
+//                contacts.add(newContact);
+//            }
+//
 //            adapter.notifyDataSetChanged();
-//            contacts = getContacts(getActivity());
-//            adapter.setContacts(contacts);
-//            contactsRecView.setAdapter(adapter);
-//            adapter.notifyDataSetChanged();
+////            contacts.add(newContact);
+////            adapter.notifyItemInserted(contacts.size()-1);
+//
+//            Intent contactIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
+//            contactIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+//
+//            contactIntent
+//                    .putExtra(ContactsContract.Intents.Insert.NAME, newName)
+//                    .putExtra(ContactsContract.Intents.Insert.PHONE, newNumber);
+//
+//            startActivity(contactIntent);
+////            adapter.notifyDataSetChanged();
+////            contacts = getContacts(getActivity());
+////            adapter.setContacts(contacts);
+////            contactsRecView.setAdapter(adapter);
+////            adapter.notifyDataSetChanged();
 
 
         });
