@@ -48,6 +48,12 @@ add 버튼에 설정된 onClick 함수에서 AlertDialog를 사용하여 이름 
 ------------
 ##### [ 기기 갤러리와 연동 ]
 
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/62409503/148046319-09f9e4b4-968b-4243-9b0e-1d2afce04193.png" width="200px" />
+</p>
+
+
+
 기기의 갤러리로부터 이미지 경로를 읽어와 imagePaths 에 저장
 
 ```java
@@ -198,7 +204,11 @@ alarmManager.setRepeating(
 
 ##### [ 알람 재설정 ]
 
-snooze 버튼을 클릭하면 10분 후에 다시 울린다
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/62409503/148046325-115d15cf-39fd-4f9f-9de6-0b472a20eeb7.png" width="200px" />
+</p>
+
+snooze 버튼을 클릭하면 10분 후에 알람이 다시 울린다
 
 ```java
 snooze.setOnClickListener(new View.OnClickListener() {
