@@ -182,7 +182,8 @@ editor.putString(key, json);
 editor.commit();
 ```
 
-정해진 시간이 되면 AlarmManger가 지정된 Broadcast Receiver에게 Broadcast
+정해진 시간이 되면 AlarmManger가 지정된 Broadcast Receiver에게 Broadcast 해준다
+Broadcast Receiver는 핸드폰에서 발생하는 특정 intent 신호를 받아주는 클래스다.
 
 ```java  
 AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
