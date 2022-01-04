@@ -1,5 +1,43 @@
 # cs496_week1
 
+### TAB1: Contacts
+
+#### Feature
+------------
+##### [ 연락처 앱과 연동하기 ]
+
+ContactsContract을 이용하여 핸드폰 내 연락처 정보를 가져왔다.
+이 때 이름과 번호가 중복되는 경우 HashSet을 이용하여 제외시켰다.
+```java
+if(cursor != null){
+    HashSet<Contact> contactHashSet = new HashSet<>();
+    while(cursor.moveToNext()){
+        if(!contactHashSet.contains(phoneContact)){
+            contacts.add(phoneContact);
+            contactHashSet.add(phoneContact);}
+```
+
+##### [ 연락처 추가 삭제 ]
+
+add 버튼에 설정된 onClick 함수에서 AlertDialog를 사용하여 이름 번호를 
+입력받고 arraylist 내 알파벳 순서에 따라 추가했다. 또한 intent을 사용하여
+핸드폰 연락처에도 추가하였다.
+
+	
+각 view에 삭제 버튼을 만들어 누를때 getAdapterPostition() 을 이용하여 arraylist 상의
+위치를 구하고 arraylist와 핸드폰 내 연락처에서 삭제해주었다.
+```java
+  Contact deletedContact = contacts.remove(getAdapterPosition());
+  notifyItemRemoved(getAdapterPosition());
+  deleteContact(context, deletedContact.getNumber(), deletedContact.getName());
+```
+
+
+##### [ 전화 걸기 ]
+
+앱 내 연락처 항목을 누르면 새로운 fragment 으로 이동하여
+이름, 번호를 보여주는 동시에 전화 버튼이 있어 누르면 바로 전화할 수 있도록 구현했다.
+
 ### TAB2: Image Gallery
 
 #### Feature
@@ -10,7 +48,7 @@
 ------------
 ##### [ 기기 갤러리와 연동 ]
 
-기기의 갤러리로부터 이미지 경로를 읽어와 list에 저장
+기기의 갤러리로부터 이미지 경로를 읽어와 imagePaths 에 저장
 
 ```java
 // this method will stores all the images
@@ -24,6 +62,7 @@ Cursor cursor = mContext.getContentResolver()
 // and adding that path in our array list.
 imagePaths.add(cursor.getString(dataColumnIndex));
 ```
+
 
 Glide 라이브러리를 이용하여 뷰에 이미지 로드
 
@@ -176,3 +215,36 @@ snooze.setOnClickListener(new View.OnClickListener() {
         });
 ```
 
+##### [ 걸어서 알람 해제 ]
+
+SensorEventListener 클래스를 이용하여  
+센서를 관리하고 이용할 수 있도록 하는 SensorManager을 등록하였다.
+기기내 STEP_DETECTOR 센서를 이용했다.
+
+```java
+public class RingActivity  extends AppCompatActivity implements SensorEventListener {
+...
+  sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+  stepCountSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+...
+
+```
+
+onSensorChanged는 등록된 센서값이 변했을 때 호출되는 함수로,
+함수가 불릴때마다 전역 변수 currentStep을 1씩 증가스켰다.
+currentStep가 5 이상이 될때 "dismiss"와 "snooze" 버튼의 visibililty을 
+"gone"에서 "visible"로 바꿔 버튼을 알람을 끌수 있도록 하였다.
+
+```java
+@Override
+public void onSensorChanged(SensorEvent sensorEvent) {
+    ...
+        if( ... ){
+            currentSteps++;
+            String s = "You Walked " + String.valueOf(currentSteps) + " steps!!";
+            stepCountView.setText(s);
+            if(currentSteps >= 5) {
+                dismiss.setVisibility(View.VISIBLE);
+                snooze.setVisibility(View.VISIBLE);
+    ...
+```
