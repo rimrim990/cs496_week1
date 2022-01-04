@@ -146,6 +146,9 @@ fullView.setOnTouchListener(new View.OnTouchListener() {
 ------------
 ##### [ 알람 설정 ]
 
+<img src="https://user-images.githubusercontent.com/62409503/148044449-09445345-ce75-4a30-9d92-1c4b48beff5a.png" width="300px" />
+<br/>
+
 scheduleAlarm 버튼을 클릭하면 사용자의 입력 값을 바탕으로 새로운 알람을 생성하고, 생성된 알람들은 adapter에서 list로 관리
 
 ```java
