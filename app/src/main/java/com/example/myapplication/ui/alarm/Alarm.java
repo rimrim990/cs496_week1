@@ -17,15 +17,27 @@ public class Alarm {
     private int alarmId;
 
     private int hour, minute;
-    private boolean started;
+    private boolean started, recurring;
     private String title;
+    private boolean monday, tuesday, wednesday, thursday, friday, saturday, sunday;
 
-    public Alarm(int alarmId, int hour, int minute, boolean started, String title) {
+    public Alarm(int alarmId, int hour, int minute, boolean started, String title, boolean recurring, boolean monday,
+                 boolean tuesday, boolean wednesday, boolean thursday, boolean friday, boolean saturday, boolean sunday) {
         this.alarmId = alarmId;
         this.hour = hour;
         this.minute = minute;
         this.started = started;
         this.title = title;
+
+        this.recurring =recurring;
+
+        this.monday = monday;
+        this.tuesday = tuesday;
+        this.wednesday = wednesday;
+        this.thursday = thursday;
+        this.friday = friday;
+        this.saturday = saturday;
+        this.sunday = sunday;
     }
 
     public void cancelAlarm(Context context, boolean isDelete) {
@@ -50,6 +62,15 @@ public class Alarm {
 
         Intent intent = new Intent(context, AlarmReceiver.class);
 
+        intent.putExtra("RECURRING", recurring);
+        intent.putExtra("MONDAY", monday);
+        intent.putExtra("TUESDAY", tuesday);
+        intent.putExtra("WEDNESDAY", wednesday);
+        intent.putExtra("THURSDAY", thursday);
+        intent.putExtra("FRIDAY", friday);
+        intent.putExtra("SATURDAY", saturday);
+        intent.putExtra("SUNDAY", sunday);
+
         intent.putExtra("TITLE", title);
 
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, 0);
@@ -66,19 +87,33 @@ public class Alarm {
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
         }
 
-        String toastText = null;
-        try {
-                toastText = String.format("Alarm %s scheduled at %02d:%02d", title, hour, minute, alarmId);
-        } catch (Exception e) {
-                e.printStackTrace();
-        }
-        Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
+        if (!recurring) {
+            String toastText = null;
 
-        alarmManager.setExact(
-                AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(),
-                alarmPendingIntent
-        );
+            try {
+                toastText = String.format("One Time Alarm %s scheduled for at %02d:%02d", title, hour, minute);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
+
+            alarmManager.setExact(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    alarmPendingIntent
+            );
+        } else {
+            String toastText = String.format("Recurring Alarm %s scheduled for at %02d:%02d", title,  hour, minute);
+            Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
+
+            final long RUN_DAILY = 24 * 60 * 60 * 1000;
+            alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    RUN_DAILY,
+                    alarmPendingIntent
+            );
+        }
 
         this.started = true;
     }
@@ -117,5 +152,43 @@ public class Alarm {
     }
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Boolean getRecurring() {
+        return recurring;
+    }
+
+    public String getRecurringDaysText() {
+        String recurringDays = "";
+
+        if (this.monday) {
+            recurringDays += "Mon ";
+        }
+
+        if (this.tuesday) {
+            recurringDays += "Tue ";
+        }
+
+        if (this.wednesday) {
+            recurringDays += "Wed ";
+        }
+
+        if (this.thursday) {
+            recurringDays += "Thu ";
+        }
+
+        if (this.friday) {
+            recurringDays += "Fri ";
+        }
+
+        if (this.saturday) {
+            recurringDays += "Sat ";
+        }
+
+        if (this.sunday) {
+            recurringDays += "Sun ";
+        }
+
+        return recurringDays;
     }
 }

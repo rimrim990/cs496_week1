@@ -5,32 +5,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
+    <Button
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Walk 5 Steps to Snooze!!"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:layout_margin="10dp"
+        android:text="DISMISS"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/walkText"
-        />
-
-    <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/activity_ring_dismiss" />
+    <Button
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:layout_margin="10dp"
+        android:text="SNOOZE"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/stepCountView"
-        />
-
-<!--    <Button-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="SNOOZE"-->
-<!--        android:layout_gravity="center_horizontal"-->
-<!--        android:id="@+id/activity_ring_dismiss" />-->
+        android:id="@+id/activity_ring_snooze" />
 
     <ImageView
         android:layout_height="match_parent"

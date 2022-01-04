@@ -13,15 +13,22 @@
     <TextView
         android:id="@+id/item_alarm_time"
         android:layout_width="0dp"
-        android:layout_weight="0.4"
+        android:layout_weight="0.35"
         android:layout_height="wrap_content"
         android:textSize="40sp"
         android:paddingLeft="5dp"/>
     <TextView
+        android:layout_width="0dp"
+        android:layout_weight="0.15"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_alarm_recurringDays"
+        android:textSize="10sp"/>
+    <TextView
         android:id="@+id/item_alarm_title"
         android:layout_width="0dp"
-        android:layout_weight="0.4"
+        android:layout_weight="0.3"
         android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
         android:textSize="20sp"/>
 
         <Switch

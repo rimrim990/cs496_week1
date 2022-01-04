@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import static android.Manifest.permission.ACTIVITY_RECOGNITION;
 import static android.Manifest.permission.CALL_PHONE;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.FOREGROUND_SERVICE;
@@ -9,6 +10,7 @@ import static android.Manifest.permission.WRITE_CONTACTS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         int RcontactPermission = ActivityCompat.checkSelfPermission(this, READ_CONTACTS);
         int VibratePermission = ActivityCompat.checkSelfPermission(this, VIBRATE);
         int CallPermission = ActivityCompat.checkSelfPermission(this, CALL_PHONE);
+        int ActivityPermission = ActivityCompat.checkSelfPermission(this, ACTIVITY_RECOGNITION);
 
         List<String> listPermissionsNeeded = new ArrayList<>();
 
