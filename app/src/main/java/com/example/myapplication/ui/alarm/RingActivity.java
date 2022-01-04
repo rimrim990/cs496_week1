@@ -96,6 +96,8 @@ public class RingActivity  extends AppCompatActivity implements SensorEventListe
         stepCountView = findViewById(R.id.stepCountView);
 
         currentSteps = 0;
+        String s = "You Walked " + String.valueOf(currentSteps) + " steps!!";
+        stepCountView.setText(s);
 //        while(true){
 //            if(currentSteps >= 5) {
 //                dismiss.setVisibility(View.VISIBLE);
