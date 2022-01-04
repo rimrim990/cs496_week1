@@ -7,7 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
@@ -31,6 +34,17 @@ public class AlarmListFragment extends Fragment {
     private Button addAlarm;
     private ArrayList<Alarm> alarms;
     private final String ARG_ALARM_LIST = "ARG_ALARM_LIST";
+
+    CheckBox recurring;
+    CheckBox mon;
+    CheckBox tue;
+    CheckBox wed;
+    CheckBox thu;
+    CheckBox fri;
+    CheckBox sat;
+    CheckBox sun;
+    LinearLayout recurringOptions;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,7 +92,29 @@ public class AlarmListFragment extends Fragment {
                 EditText title = (EditText) alarmView.findViewById(R.id.fragment_createalarm_title);
                 Button scheduleAlarm = (Button) alarmView.findViewById(R.id.fragment_createalarm_scheduleAlarm);
 
+                recurring = (CheckBox)alarmView.findViewById(R.id.fragment_createalarm_recurring);
+                mon = (CheckBox)alarmView.findViewById(R.id.fragment_createalarm_checkMon);
+                tue = (CheckBox)alarmView.findViewById(R.id.fragment_createalarm_checkTue);
+                wed = (CheckBox)alarmView.findViewById(R.id.fragment_createalarm_checkWed);
+                thu = (CheckBox)alarmView.findViewById(R.id.fragment_createalarm_checkThu);
+                fri = (CheckBox)alarmView.findViewById(R.id.fragment_createalarm_checkFri);
+                sat = (CheckBox)alarmView.findViewById(R.id.fragment_createalarm_checkSat);
+                sun = (CheckBox)alarmView.findViewById(R.id.fragment_createalarm_checkSun);
+                recurringOptions = (LinearLayout) alarmView.findViewById(R.id.fragment_createalarm_recurring_options);
+
                 final AlertDialog dialog = builder.create();
+
+                recurring.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            recurringOptions.setVisibility(View.VISIBLE);
+                    } else {
+                            recurringOptions.setVisibility(View.GONE);
+                        }
+                }
+            });
+
                 scheduleAlarm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -121,7 +157,15 @@ public class AlarmListFragment extends Fragment {
                 hour,
                 minute,
                 true,
-                title
+                title,
+                recurring.isChecked(),
+                mon.isChecked(),
+                tue.isChecked(),
+                wed.isChecked(),
+                thu.isChecked(),
+                fri.isChecked(),
+                sat.isChecked(),
+                sun.isChecked()
         );
 
         alarm.schedule(getContext());

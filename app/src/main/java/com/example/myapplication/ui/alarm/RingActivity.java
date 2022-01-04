@@ -13,9 +13,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 
+import java.util.Calendar;
+import java.util.Random;
+
 public class RingActivity  extends AppCompatActivity {
 
     Button dismiss;
+    Button snooze;
     ImageView clock;
 
     @Override
@@ -24,10 +28,42 @@ public class RingActivity  extends AppCompatActivity {
         setContentView(R.layout.activity_ring);
 
         dismiss = findViewById(R.id.activity_ring_dismiss);
+        snooze = findViewById(R.id.activity_ring_snooze);
 
         dismiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intentService = new Intent(getApplicationContext(), AlarmService.class);
+                getApplicationContext().stopService(intentService);
+                finish();
+            }
+        });
+
+        snooze.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                calendar.add(Calendar.MINUTE, 10);
+
+                Alarm alarm = new Alarm(
+                        new Random().nextInt(Integer.MAX_VALUE),
+                        calendar.get(Calendar.HOUR_OF_DAY),
+                        calendar.get(Calendar.MINUTE),
+                        true,
+                        "Snooze",
+                        false,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false
+                );
+
+                alarm.schedule(getApplicationContext());
+
                 Intent intentService = new Intent(getApplicationContext(), AlarmService.class);
                 getApplicationContext().stopService(intentService);
                 finish();
