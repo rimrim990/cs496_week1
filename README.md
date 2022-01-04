@@ -3,6 +3,10 @@
 ### TAB2: Image Gallery
 
 #### Feature
+1. 기기 갤러리와 연동
+2. 사진 촬영
+3. 사진 삭제
+4. 사진 확대
 ------------
 ##### [ 기기 갤러리와 연동 ]
 
@@ -60,7 +64,7 @@ MediaScannerConnection.scanFile(mContext, new String[]{f.toString()}, null, null
 ```
 
 ##### [ 사진 삭제 ]
-이미지를 길게 클릭하면 삭제됨
+이미지를 길게 클릭하면 삭제된다
 
 ```java
 holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -73,9 +77,7 @@ holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                                 Uri.fromFile(new File(imagePaths.get(holder.getAdapterPosition())))));
 
         imagePaths.remove(holder.getAdapterPosition());
-        notifyDataSetChanged();
-
-        Toast.makeText(context, "image deleted", Toast.LENGTH_SHORT).show();
+        ...
         }
 
         return true;
@@ -84,6 +86,17 @@ holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
 ```
 
 ##### [ 사진 확대 ]
+```java
+fullView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                // inside on touch event method we are calling on
+                // touch event method and passing our motion event to it.
+                scaleGestureDetector.onTouchEvent(motionEvent);
+                return true;
+            }
+        });
+```
 
 
 ### TAB3: Alarm
@@ -93,6 +106,22 @@ holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
 2. 알람 재설정
 ------------
 ##### [ 알람 설정 ]
+
+scheduleAlarm 버튼을 클릭하면 사용자의 입력 값을 바탕으로 새로운 알람을 생성하고, 생성된 알람들은 adapter에서 list로 관리
+
+```java
+scheduleAlarm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ...
+
+                        scheduleAlarm(curHour, curMinute, alarmTitle);
+                        alarmRecyclerViewAdapter.notifyDataSetChanged();
+
+                        dialog.dismiss();
+                    }
+                });
+```
 
 GSON 라이브러리로 알람 list를 JSON 형태로 변환하여 SharedPreference에 저장 
 
@@ -124,5 +153,26 @@ alarmManager.setRepeating(
 
 ##### [ 알람 재설정 ]
 
+snooze 버튼을 클릭하면 10분 후에 다시 울린다
 
+```java
+snooze.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                calendar.add(Calendar.MINUTE, 5);
+
+                Alarm alarm = new Alarm(
+                        ...
+                );
+
+                alarm.schedule(getApplicationContext());
+
+                Intent intentService = new Intent(getApplicationContext(), AlarmService.class);
+                getApplicationContext().stopService(intentService);
+                finish();
+            }
+        });
+```
 
