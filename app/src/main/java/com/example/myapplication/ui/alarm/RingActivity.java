@@ -61,7 +61,7 @@ public class RingActivity  extends AppCompatActivity implements SensorEventListe
             public void onClick(View view) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.add(Calendar.MINUTE, 10);
+                calendar.add(Calendar.MINUTE, 5);
 
                 Alarm alarm = new Alarm(
                         new Random().nextInt(Integer.MAX_VALUE),

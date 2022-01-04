@@ -76,6 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="0dp"
+                android:paddingLeft="-5dp"
                 android:scaleX="0.5"
                 android:scaleY="0.5"
                 android:text="Mon"
@@ -88,6 +89,7 @@
                 android:scaleX="0.5"
                 android:scaleY="0.5"
                 android:minWidth="0dp"
+                android:paddingLeft="-5dp"
                 android:text="Tue"
                 android:textSize="10sp"/>
 
@@ -98,6 +100,7 @@
                 android:scaleX="0.5"
                 android:scaleY="0.5"
                 android:minWidth="0dp"
+                android:paddingLeft="-5dp"
                 android:text="Wed"
                 android:textSize="10sp"/>
 
@@ -108,6 +111,7 @@
                 android:scaleX="0.5"
                 android:scaleY="0.5"
                 android:minWidth="0dp"
+                android:paddingLeft="-5dp"
                 android:text="Thu"
                 android:textSize="10sp"/>
 
@@ -118,6 +122,7 @@
                 android:scaleX="0.5"
                 android:scaleY="0.5"
                 android:minWidth="0dp"
+                android:paddingLeft="-5dp"
                 android:text="Fri"
                 android:textSize="10sp"/>
 
@@ -128,6 +133,7 @@
                 android:scaleX="0.5"
                 android:scaleY="0.5"
                 android:minWidth="0dp"
+                android:paddingLeft="-5dp"
                 android:text="Sat"
                 android:textSize="10sp"/>
 
@@ -138,6 +144,7 @@
                 android:scaleX="0.5"
                 android:scaleY="0.5"
                 android:minWidth="0dp"
+                android:paddingLeft="-5dp"
                 android:text="Sun"
                 android:textSize="10sp"/>
 
