@@ -54,7 +54,7 @@ add 버튼에 설정된 onClick 함수에서 AlertDialog를 사용하여 이름 
 
 
 
-기기의 갤러리로부터 이미지 경로를 읽어와 imagePaths 에 저장
+기기의 갤러리로부터 이미지 경로를 읽어와 imagePaths 에 저장한다
 
 ```java
 // this method will stores all the images
@@ -70,7 +70,7 @@ imagePaths.add(cursor.getString(dataColumnIndex));
 ```
 
 
-Glide 라이브러리를 이용하여 뷰에 이미지 로드
+Glide 라이브러리를 이용하여 이미지 뷰에 이미지를 로드한다
 
 
 ```java
@@ -83,7 +83,7 @@ Glide 라이브러리를 이용하여 뷰에 이미지 로드
 
 
 
-갤러리에서 읽어온 이미지를 RecyclerView와 GridLayout을 이용하여 배치
+갤러리에서 읽어온 이미지를 RecyclerView와 GridLayout을 이용하여 화면에 배치한다
 
 ```java
 GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 3);
@@ -93,7 +93,7 @@ recyclerView.setLayoutManager(gridLayoutManager);
 ##### [ 사진 촬영 ]
 
 
-기기의 카메라 어플리케이션으로 사진을 촬영하고, 촬영된 사진을 photoURI가 가리키는 위치에 저장
+기기의 카메라 어플리케이션으로 사진을 촬영하고, 촬영된 사진을 photoURI가 가리키는 위치에 저장한다
 
 ```java
 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -102,14 +102,16 @@ takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 ```
 
-이후 MediaScanner를 호출하여 기기의 갤러리를 새로고침
+이후 MediaScanner를 호출하여 기기의 갤러리를 새로고침한다
 
 ```java
 MediaScannerConnection.scanFile(mContext, new String[]{f.toString()}, null, null);
 ```
 
 ##### [ 사진 삭제 ]
-이미지를 길게 클릭하면 삭제된다
+이미지를 길게 클릭하면 해당 사진이 삭제된다
+
+이미지를 추가할 때와 마찬가지로 MEDIA_SCAN을 통해 갤러리를 새로고침하였다
 
 ```java
 holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -131,6 +133,11 @@ holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
 ```
 
 ##### [ 사진 확대 ]
+
+이미지를 클릭하면 해당 이미지를 화면에 가득차게 볼 수 있다
+
+또한 이미지를 확대하거나 축소할 수 있다.
+
 ```java
 fullView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -157,7 +164,7 @@ fullView.setOnTouchListener(new View.OnTouchListener() {
 	<img src="https://user-images.githubusercontent.com/62409503/148045020-95655b3b-4994-4315-8725-79f216c31fd2.png" width="200px" />
 </p>												      
 
-scheduleAlarm 버튼을 클릭하면 사용자의 입력 값을 바탕으로 새로운 알람을 생성하고, 생성된 알람들은 adapter에서 list로 관리
+scheduleAlarm 버튼을 클릭하면 사용자의 입력 값을 바탕으로 새로운 알람을 생성하고, 생성된 알람들은 adapter에서 list로 관리한다
 
 ```java
 scheduleAlarm.setOnClickListener(new View.OnClickListener() {
