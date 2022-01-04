@@ -110,7 +110,7 @@ public class ContactsRecViewAdapter extends RecyclerView.Adapter<ContactsRecView
                 Contact deletedContact = contacts.remove(getAdapterPosition());
                 notifyItemRemoved(getAdapterPosition());
 
-                Toast.makeText(context, deletedContact.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Deleted " + deletedContact.getName() + ": " + deletedContact.getNumber(), Toast.LENGTH_SHORT).show();
 
 //                Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, deletedContact.getId());
 //                int deleted = context.getContentResolver().delete(uri,null,null);
