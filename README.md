@@ -134,6 +134,10 @@ holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
 
 ##### [ 사진 확대 ]
 
+<p align="center">
+	  <img src="https://user-images.githubusercontent.com/62409503/148048528-f6e3e3c4-37a8-492f-bae7-1cf39800a75c.png" width="200px" />
+</p>
+
 이미지를 클릭하면 해당 이미지를 화면에 가득차게 볼 수 있다
 
 또한 이미지를 확대하거나 축소할 수 있다.
