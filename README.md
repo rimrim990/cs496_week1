@@ -59,7 +59,32 @@ startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 MediaScannerConnection.scanFile(mContext, new String[]{f.toString()}, null, null);
 ```
 
+##### [ 사진 삭제 ]
+이미지를 길게 클릭하면 삭제됨
+
+```java
+holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+    @Override
+    public boolean onLongClick(View view) {
+
+      if(imgFile.exists()) {
+        imgFile.delete();
+        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, 
+                                Uri.fromFile(new File(imagePaths.get(holder.getAdapterPosition())))));
+
+        imagePaths.remove(holder.getAdapterPosition());
+        notifyDataSetChanged();
+
+        Toast.makeText(context, "image deleted", Toast.LENGTH_SHORT).show();
+        }
+
+        return true;
+     }
+});
+```
+
 ##### [ 사진 확대 ]
+
 
 ### TAB3: Alarm
 
@@ -83,7 +108,6 @@ String json = gson.toJson(alarms);
 editor.putString(key, json);
 editor.commit();
 ```
-
 
 정해진 시간이 되면 AlarmManger가 지정된 Broadcast Receiver에게 Broadcast
 
