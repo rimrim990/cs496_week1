@@ -6,10 +6,32 @@
 ------------
 ##### [ 기기 갤러리와 연동 ]
 
-기기의 갤러리로부터 이미지를 읽어와
+기기의 갤러리로부터 이미지 경로를 읽어와 list에 저장
+
 ```java
-Cursor cursor = mContext.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
+// this method will stores all the images
+// from the gallery in Cursor
+Cursor cursor = mContext.getContentResolver()
+                         .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
+
+...
+
+// after that we are getting the image file path
+// and adding that path in our array list.
+imagePaths.add(cursor.getString(dataColumnIndex));
 ```
+
+Glide 라이브러리를 이용하여 뷰에 이미지 로드
+
+
+```java
+ Glide.with(context)
+                    .load(Uri.fromFile(imgFile))
+                    .placeholder(R.drawable.ic_launcher_foreground)
+                    .error(R.drawable.ic_launcher_background)
+                    .into(((ViewHolderItem)holder).iv_icon);
+```
+
 
 
 갤러리에서 읽어온 이미지를 RecyclerView와 GridLayout을 이용하여 배치
